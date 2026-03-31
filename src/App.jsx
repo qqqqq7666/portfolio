@@ -463,7 +463,7 @@ export default function App() {
                 <h3 className="text-lg font-semibold text-rose-300 mb-2">기존 방식: Polling (12,000 Requests - 실패 지점)</h3>
                 <p className="text-sm text-slate-400 mb-4">지속적인 HTTP 요청으로 인한 서버 리소스 낭비 및 에러 발생</p>
                 <div className="mb-5 rounded-lg overflow-hidden border border-slate-700 bg-slate-900">
-                  <img src="/src/images/polling_12000.png" alt="Polling 부하 테스트 결과" className="w-full h-auto object-cover opacity-90 hover:opacity-100 transition-opacity" />
+                  <img src="/images/polling_12000.png" alt="Polling 부하 테스트 결과" className="w-full h-auto object-cover opacity-90 hover:opacity-100 transition-opacity" />
                 </div>
                 <ul className="text-sm text-slate-300 space-y-2 mt-auto">
                   <li>• Total Requests: 703,479건</li>
@@ -477,7 +477,7 @@ export default function App() {
                 <h3 className="text-lg font-semibold text-emerald-300 mb-2">개선 방식: SSE 도입 (18,000 Requests)</h3>
                 <p className="text-sm text-slate-400 mb-4">단방향 이벤트 스트림(Server-Sent Events)으로 트래픽 최적화</p>
                 <div className="mb-5 rounded-lg overflow-hidden border border-slate-700 bg-slate-900">
-                  <img src="/src/images/sse_18000.png" alt="SSE 부하 테스트 결과" className="w-full h-auto object-cover opacity-90 hover:opacity-100 transition-opacity" />
+                  <img src="/images/sse_18000.png" alt="SSE 부하 테스트 결과" className="w-full h-auto object-cover opacity-90 hover:opacity-100 transition-opacity" />
                 </div>
                 <ul className="text-sm text-slate-300 space-y-2 mt-auto">
                   <li>• SSE Connect: 18,000건 성공 <span className="inline-block ml-1 px-2 py-0.5 bg-emerald-500/20 text-emerald-300 text-xs font-bold rounded-full">↑ 80% 성능 증가</span></li>
