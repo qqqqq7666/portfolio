@@ -95,28 +95,6 @@ const PROJECTS = [
     ]
   },
   {
-    title: 'MSA 기반 물류 배송 및 주문 관리 플랫폼',
-    period: '2025.11 - 2025.11',
-    team: '5명 (팀원)',
-    role: '백엔드 개발, MSA 아키텍처 설계 및 비동기 트랜잭션 최적화',
-    contribution: '백엔드 40% / 아키텍처 설계 40% / 기획 20%',
-    links: {
-      github: 'https://github.com/sparta-logitics/sparta_logistics/tree/dev/order-service',
-      notion: 'https://www.notion.so/13-Code-Cargo-2df2dc8f74fd81ab80f2d6e175ea1b74?pvs=12'
-    },
-    techStack: ['Java', 'Spring Boot', 'Spring Data JPA', 'QueryDSL', 'RabbitMQ', 'Redis', 'MySQL'],
-    features: [
-      'CQRS 패턴을 도입하여 상태를 변경하는 Command와 데이터를 조회하는 Query 로직을 명확히 분리하고, QueryDSL을 활용해 사용자 권한에 따른 동적 주문 목록 조회 API를 구축',
-      'RabbitMQ를 활용한 Event Driven Architecture 및 Saga 패턴을 적용하여, 주문-배송-허브로 이어지는 분산 트랜잭션 환경에서 시스템 간 강한 결합을 끊어내고 장애 전파를 방지',
-      'Redis를 활용해 주문 생성 API에 멱등성을 보장하여 중복 요청을 방지하고, 단건 조회에만 선택적으로 캐시를 적용하여 데이터 일관성과 조회 성능을 동시 확보'
-    ],
-    learnings: [
-      'MSA 환경에서 물리적 데이터 분리로 인해 HUB_MANAGER의 주문 조회가 불가능했던 문제를 겪었으나, 비동기 응답 메시지를 통해 검색에 필요한 소속 ID를 Order 엔티티에 복제하고 인덱싱하는 비정규화를 수용하여 조회 성능을 극대화하는 트러블슈팅을 경험했습니다.',
-      '주문 생성 시 배송 및 허브 계산까지 모두 동기적으로 처리하려던 초기 구조의 한계(를 인지하고, 큐를 활용한 최종 일관성 구조로 재설계하여 클라이언트가 폴링으로 최종 상태를 확인하도록 API를 개선했습니다.',
-      '주문 서비스와 배송 서비스의 책임을 DDD 관점에서 명확히 분리하며, 서비스 간 독립성을 지키고 보상 트랜잭션의 복잡도를 낮추는 이상적인 MSA 설계 방식을 체득했습니다.'
-    ]
-  },
-  {
     title: 'Bidket (MSA 기반 대규모 C2C 경매 이커머스)',
     period: '2026.01 - 2026.03',
     team: '4명 (팀장)',
@@ -138,6 +116,28 @@ const PROJECTS = [
       'Redis 자료구조의 특성을 깊이 분석하여, Heartbeat 갱신 시 Hash 전체의 만료 시간이 연장되던 문제를 ZSet의 Score 기반으로 변경해 만료 세션을 정확히 제어하는 트러블슈팅을 경험했습니다.',
       'Spring WebFlux와 R2DBC를 활용한 Non-Blocking 아키텍처를 직접 설계하며, 적은 리소스로도 대규모 트래픽을 효율적으로 제어하는 방법을 체득했습니다.',
       '부하 테스트를 주도하며 기존 Polling 방식의 한계인 소켓 고갈을 인지하고, SSE로 통신 방식을 개선하여 서버 부하를 극적으로 낮추는 최적화 사이클을 완수했습니다.'
+    ]
+  },
+  {
+    title: 'Sparta Logistics (MSA 기반 물류 배송 및 주문 관리 플랫폼)',
+    period: '2025.11 - 2025.11',
+    team: '5명 (팀원)',
+    role: '백엔드 개발, MSA 아키텍처 설계 및 비동기 트랜잭션 최적화',
+    contribution: '백엔드 40% / 아키텍처 설계 40% / 기획 20%',
+    links: {
+      github: 'https://github.com/sparta-logitics/sparta_logistics/tree/dev/order-service',
+      notion: 'https://www.notion.so/13-Code-Cargo-2df2dc8f74fd81ab80f2d6e175ea1b74?pvs=12'
+    },
+    techStack: ['Java', 'Spring Boot', 'Spring Data JPA', 'QueryDSL', 'RabbitMQ', 'Redis', 'MySQL'],
+    features: [
+      'CQRS 패턴을 도입하여 상태를 변경하는 Command와 데이터를 조회하는 Query 로직을 명확히 분리하고, QueryDSL을 활용해 사용자 권한에 따른 동적 주문 목록 조회 API를 구축',
+      'RabbitMQ를 활용한 Event Driven Architecture 및 Saga 패턴을 적용하여, 주문-배송-허브로 이어지는 분산 트랜잭션 환경에서 시스템 간 강한 결합을 끊어내고 장애 전파를 방지',
+      'Redis를 활용해 주문 생성 API에 멱등성을 보장하여 중복 요청을 방지하고, 단건 조회에만 선택적으로 캐시를 적용하여 데이터 일관성과 조회 성능을 동시 확보'
+    ],
+    learnings: [
+      'MSA 환경에서 물리적 데이터 분리로 인해 HUB_MANAGER의 주문 조회가 불가능했던 문제를 겪었으나, 비동기 응답 메시지를 통해 검색에 필요한 소속 ID를 Order 엔티티에 복제하고 인덱싱하는 비정규화를 수용하여 조회 성능을 극대화하는 트러블슈팅을 경험했습니다.',
+      '주문 생성 시 배송 및 허브 계산까지 모두 동기적으로 처리하려던 초기 구조의 한계(를 인지하고, 큐를 활용한 최종 일관성 구조로 재설계하여 클라이언트가 폴링으로 최종 상태를 확인하도록 API를 개선했습니다.',
+      '주문 서비스와 배송 서비스의 책임을 DDD 관점에서 명확히 분리하며, 서비스 간 독립성을 지키고 보상 트랜잭션의 복잡도를 낮추는 이상적인 MSA 설계 방식을 체득했습니다.'
     ]
   },
   {
