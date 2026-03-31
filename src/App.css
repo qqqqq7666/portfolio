@@ -1,0 +1,15 @@
+@media print {
+
+  body {
+    zoom: 0.6;
+  }
+
+  header {
+    page-break-after: avoid;
+  }
+
+  section {
+    page-break-inside: avoid;
+  }
+
+}
