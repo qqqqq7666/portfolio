@@ -128,7 +128,7 @@ const PROJECTS = [
       github: 'https://github.com/sparta-logitics/sparta_logistics/tree/dev/order-service',
       notion: 'https://www.notion.so/13-Code-Cargo-2df2dc8f74fd81ab80f2d6e175ea1b74?pvs=12'
     },
-    techStack: ['Java', 'Spring Boot', 'Spring Data JPA', 'QueryDSL', 'RabbitMQ', 'Redis', 'MySQL'],
+    techStack: ['Java', 'Spring Boot', 'Spring Data JPA', 'QueryDSL', 'RabbitMQ', 'Redis', 'PostgreSQL'],
     features: [
       'CQRS 패턴을 도입하여 상태를 변경하는 Command와 데이터를 조회하는 Query 로직을 명확히 분리하고, QueryDSL을 활용해 사용자 권한에 따른 동적 주문 목록 조회 API를 구축',
       'RabbitMQ를 활용한 Event Driven Architecture 및 Saga 패턴을 적용하여, 주문-배송-허브로 이어지는 분산 트랜잭션 환경에서 시스템 간 강한 결합을 끊어내고 장애 전파를 방지',
