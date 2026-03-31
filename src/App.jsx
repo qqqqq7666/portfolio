@@ -122,7 +122,7 @@ const PROJECTS = [
     title: 'Sparta Logistics (MSA 기반 물류 배송 및 주문 관리 플랫폼)',
     period: '2025.11 - 2025.11',
     team: '5명 (팀원)',
-    role: '백엔드 개발, MSA 아키텍처 설계 및 비동기 트랜잭션 최적화',
+    role: 'MSA 아키텍처 설계 및 비동기 트랜잭션 최적화, 주문 시스템 개발',
     contribution: '백엔드 40% / 아키텍처 설계 40% / 기획 20%',
     links: {
       github: 'https://github.com/sparta-logitics/sparta_logistics/tree/dev/order-service',
