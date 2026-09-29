@@ -69,6 +69,31 @@ const SKILLS = [
 
 const PROJECTS = [
   {
+    title: 'TRINIONE (부동산 매물 홍보 랜딩 페이지 및 관리자 대시보드)',
+    period: '2026.04 - 2026.06',
+    team: '1명 (개인 프로젝트)',
+    role: '풀스택 개발',
+    contribution: '기획 100% / 프론트엔드 100% / 백엔드 100%',
+    image: null,
+    links: {
+      url: 'https://trinione.com/',
+    },
+    techStack: ['TypeScript', 'React 19', 'Tailwind CSS 4', 'Vite', 'Hono', 'Cloudflare Workers', 'Cloudflare D1', 'Cloudflare R2', 'Drizzle ORM'],
+    features: [
+      'React 19와 Tailwind CSS 4를 활용하여 반응형 부동산 매물 홍보 랜딩 페이지 및 고객 문의 접수 폼 구현',
+      'Hono 프레임워크와 Cloudflare Workers를 결합하여 빠르고 가벼운 엣지(Edge) 기반 Serverless API 구축',
+      'Cloudflare D1(SQLite) 및 R2 스토리지를 Drizzle ORM과 연동하여 매물 정보, 태그, 이미지 데이터 관리',
+      'JWT 기반 인증을 통해 관리자 대시보드(/admin)에서 고객 상담 신청 내역 및 매물 정보를 관리(CRUD)할 수 있도록 구현',
+      'Zod를 통한 데이터 유효성 검사 및 Resend API를 이용한 이메일 발송 연동으로 고객 문의 알림 처리'
+    ],
+    learnings: [
+      'Cloudflare 생태계(Workers, D1, R2)와 Hono를 결합하여 콜드 스타트가 빠르고 확장성이 높은 Serverless 백엔드 아키텍처를 경험했습니다.',
+      'Vite 환경에서 React 19와 Tailwind CSS 4를 적용하며 최신 프론트엔드 기술 스택을 학습하고, 랜딩 페이지 빌더 등 복잡한 UI를 모듈화하는 방법을 익혔습니다.',
+      '초기 Spring Boot 기반의 백엔드 설계를 Hono와 Cloudflare 인프라로 전환하며, 프레임워크 간의 차이를 이해하고 경량화된 API 설계의 장단점을 체득했습니다.',
+      'Drizzle ORM을 활용하여 Cloudflare D1 환경에서의 타입 안정성을 확보하고, SQL 기반의 데이터베이스 스키마를 코드로 관리하는 경험을 쌓았습니다.'
+    ]
+  },
+  {
     title: '토론하는아이들 (교육 홍보 및 관리자 App 서비스)',
     period: '2026.02 - 현재 라이브 운영 중',
     team: '1명 (개인 프로젝트)',
@@ -429,6 +454,69 @@ export default function App() {
             {PROJECTS.map((project, idx) => (
               <ProjectCard key={idx} project={project} />
             ))}
+          </div>
+        </section>
+
+        {/* TRINIONE Migration Section */}
+        <section className="relative">
+          <div className="absolute -inset-4 bg-gradient-to-r from-emerald-500/10 to-teal-500/10 rounded-3xl blur-xl -z-10"></div>
+          <div className="bg-slate-900/80 p-8 rounded-2xl border border-emerald-500/20 shadow-2xl">
+            <div className="flex items-center mb-6">
+              <Cloud className="text-emerald-400 mr-3" size={28} />
+              <h2 className="text-2xl font-bold text-white">비용 최적화 및 서버리스 아키텍처 전환 (TRINIONE 프로젝트)</h2>
+            </div>
+            <p className="text-slate-300 mb-6 leading-relaxed">
+              기존 Java Spring Boot 기반으로 구축했던 백엔드를 Hono 프레임워크와 Cloudflare 생태계(Workers, D1, R2) 기반의 Serverless 아키텍처로 마이그레이션하여 서버 유지 비용 문제를 극적으로 해결했습니다.
+            </p>
+
+            <div className="mb-8 flex flex-col md:flex-row items-start md:items-center p-5 bg-emerald-500/10 border border-emerald-500/30 rounded-xl">
+              <div className="flex-shrink-0 mb-4 md:mb-0 md:mr-5 p-3 bg-emerald-500/20 rounded-xl">
+                <TrendingUp className="text-emerald-400" size={32} />
+              </div>
+              <div>
+                <h4 className="text-xl font-bold text-emerald-300 mb-1">💡 인프라 유지 비용 100% 절감 및 확장성 확보</h4>
+                <p className="text-slate-300 text-sm leading-relaxed">
+                  24시간 상시 가동되어야 하는 서버 및 DB 유지 비용의 부담을 줄이기 위해 요청 시에만 동작하는 <b>Edge Serverless 컴퓨팅</b> 환경으로 전환했습니다.
+                  결과적으로 <strong className="text-white">초기 서비스 운영 단계에서 발생하는 인프라 고정 비용을 0원으로 단축</strong>시켰으며, 글로벌 엣지 네트워크를 통한 빠른 응답 속도까지 확보했습니다.
+                </p>
+              </div>
+            </div>
+
+            <div className="mb-8 flex flex-col md:flex-row items-start md:items-center p-5 bg-teal-500/10 border border-teal-500/30 rounded-xl">
+              <div className="flex-shrink-0 mb-4 md:mb-0 md:mr-5 p-3 bg-teal-500/20 rounded-xl">
+                <Workflow className="text-teal-400" size={32} />
+              </div>
+              <div>
+                <h4 className="text-xl font-bold text-teal-300 mb-1">🤖 AI 페어 프로그래밍을 활용한 신속한 마이그레이션 전략</h4>
+                <p className="text-slate-300 text-sm leading-relaxed">
+                  초기에는 가장 익숙하고 구조화에 유리한 <b>Java Spring Boot</b>로 핵심 비즈니스 로직과 API를 빠르고 견고하게 1차 구축하여 도메인 규칙을 확립했습니다. 
+                  이후 <b>AI 도구(Claude, GPT 등)를 적극 활용하여, 검증된 Spring 코드를 TypeScript 및 Hono 프레임워크 기반으로 마이그레이션</b>했습니다.
+                  이를 통해 <strong className="text-white">새로운 기술 생태계(Edge, Serverless)로 진입하는 학습 곡선과 전체 개발 기간을 대폭 단축</strong>시켰으며, 전환 과정에서 비동기 처리 및 Serverless 환경에 최적화된 아키텍처로 리팩토링을 완수했습니다.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="bg-slate-800/80 p-6 rounded-xl border border-slate-700 flex flex-col">
+                <h3 className="text-lg font-semibold text-slate-300 mb-2">기존: Java Spring Boot</h3>
+                <p className="text-sm text-slate-400 mb-4">안정적인 객체 지향적 설계와 풍부한 생태계를 가졌으나, 소규모 서비스 초기 운영 시 인프라 고정 비용이 지속적으로 발생</p>
+                <ul className="text-sm text-slate-300 space-y-2 mt-auto">
+                  <li className="flex items-start"><span className="w-1.5 h-1.5 bg-slate-500 rounded-full mr-2 mt-1.5 flex-shrink-0"></span> <span>AWS EC2 등 기반 24시간 서버 상시 가동</span></li>
+                  <li className="flex items-start"><span className="w-1.5 h-1.5 bg-slate-500 rounded-full mr-2 mt-1.5 flex-shrink-0"></span> <span>관계형 DB(RDS 등) 인스턴스 호스팅 비용 발생</span></li>
+                  <li className="flex items-start"><span className="w-1.5 h-1.5 bg-slate-500 rounded-full mr-2 mt-1.5 flex-shrink-0"></span> <span>Spring의 다소 무거운 초기 구동 속도로 인한 Serverless 도입 한계</span></li>
+                </ul>
+              </div>
+
+              <div className="bg-slate-800/80 p-6 rounded-xl border border-emerald-500/20 flex flex-col">
+                <h3 className="text-lg font-semibold text-emerald-300 mb-2">개선: Hono + Cloudflare (Serverless)</h3>
+                <p className="text-sm text-slate-400 mb-4">가볍고 빠른 엣지 런타임과 완전 관리형 Serverless 인프라를 통한 비용 효율 극대화</p>
+                <ul className="text-sm text-slate-300 space-y-2 mt-auto">
+                  <li className="flex items-start"><span className="w-1.5 h-1.5 bg-emerald-400 rounded-full mr-2 mt-1.5 flex-shrink-0"></span> <span>Cloudflare Workers를 활용한 Edge 기반 API 배포</span></li>
+                  <li className="flex items-start"><span className="w-1.5 h-1.5 bg-emerald-400 rounded-full mr-2 mt-1.5 flex-shrink-0"></span> <span>D1 (SQLite) 및 R2 채택으로 DB/스토리지 유지 비용 해결</span></li>
+                  <li className="flex items-start"><span className="w-1.5 h-1.5 bg-emerald-400 rounded-full mr-2 mt-1.5 flex-shrink-0"></span> <span>초경량 프레임워크 Hono 도입으로 빠른 Cold Start 및 응답 달성</span></li>
+                </ul>
+              </div>
+            </div>
           </div>
         </section>
 
