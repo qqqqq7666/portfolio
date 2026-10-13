@@ -1,5 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { flushSync } from 'react-dom';
 import { Github, Mail, ExternalLink, Youtube, BookOpen, ChevronDown } from 'lucide-react';
+
+// PDF 링크는 절대 URL이어야 열리므로 GitHub raw 주소를 사용
+const IMG_BASE = import.meta.env.VITE_IMG_BASE ?? 'https://raw.githubusercontent.com/qqqqq7666/portfolio/main/public';
+
+// 인쇄(PDF 저장) 중에는 접힌 카드/details를 모두 펼침
+const usePrinting = () => {
+  const [printing, setPrinting] = useState(false);
+  useEffect(() => {
+    const on = () => flushSync(() => setPrinting(true));
+    const off = () => setPrinting(false);
+    window.addEventListener('beforeprint', on);
+    window.addEventListener('afterprint', off);
+    return () => {
+      window.removeEventListener('beforeprint', on);
+      window.removeEventListener('afterprint', off);
+    };
+  }, []);
+  return printing;
+};
+
+const ZoomableImage = ({ src, alt, className = '' }) => (
+  <a href={IMG_BASE + src} target="_blank" rel="noopener noreferrer" title="클릭하면 원본 이미지가 열립니다" className="block cursor-zoom-in">
+    <img src={src} alt={alt} loading="lazy" className={className} />
+  </a>
+);
 
 // --- 데이터 정의 ---
 
@@ -183,7 +209,9 @@ const SectionTitle = ({ children }) => (
 );
 
 const ProjectCard = ({ project, sub = false }) => {
-  const [open, setOpen] = useState(false);
+  const [openState, setOpen] = useState(false);
+  const printing = usePrinting();
+  const open = openState || printing;
   const { links } = project;
 
   return (
@@ -191,7 +219,7 @@ const ProjectCard = ({ project, sub = false }) => {
       <div className="flex items-start gap-3 p-4">
         <button
           type="button"
-          onClick={() => setOpen(!open)}
+          onClick={() => setOpen(!openState)}
           aria-expanded={open}
           className="flex-1 min-w-0 text-left"
         >
@@ -228,7 +256,7 @@ const ProjectCard = ({ project, sub = false }) => {
           )}
           <button
             type="button"
-            onClick={() => setOpen(!open)}
+            onClick={() => setOpen(!openState)}
             aria-label={open ? '상세 접기' : '상세 보기'}
             className="p-1.5 text-slate-500 hover:text-slate-200 transition-colors"
           >
@@ -271,16 +299,17 @@ const ProjectCard = ({ project, sub = false }) => {
           )}
 
           {project.diagram && (
-            <details>
+            <details open={printing || undefined}>
               <summary className="cursor-pointer text-xs text-slate-500 hover:text-slate-300 transition-colors">
-                활동 다이어그램 보기
+                활동 다이어그램 보기 <span className="text-slate-600">(클릭하면 원본)</span>
               </summary>
-              <img
-                src={project.diagram}
-                alt={`${project.title} 활동 다이어그램`}
-                loading="lazy"
-                className="mt-3 w-full h-auto rounded-md border border-slate-800"
-              />
+              <div className="mt-3">
+                <ZoomableImage
+                  src={project.diagram}
+                  alt={`${project.title} 활동 다이어그램`}
+                  className="w-full h-auto rounded-md border border-slate-800"
+                />
+              </div>
             </details>
           )}
         </div>
@@ -289,7 +318,9 @@ const ProjectCard = ({ project, sub = false }) => {
   );
 };
 
-const PollingVsSse = () => (
+const PollingVsSse = () => {
+  const printing = usePrinting();
+  return (
   <div>
     <div className="overflow-x-auto">
       <table className="w-full text-sm text-left">
@@ -319,27 +350,28 @@ const PollingVsSse = () => (
         </tbody>
       </table>
     </div>
-    <details className="mt-3">
+    <details className="mt-3" open={printing || undefined}>
       <summary className="cursor-pointer text-xs text-slate-500 hover:text-slate-300 transition-colors">
-        부하 테스트 캡처 보기
+        부하 테스트 캡처 보기 <span className="text-slate-600">(클릭하면 원본)</span>
       </summary>
       <div className="grid md:grid-cols-2 gap-4 mt-3">
         <figure className="rounded-md border border-rose-500/30 overflow-hidden">
           <figcaption className="px-3 py-1.5 bg-rose-500/10 text-xs text-rose-300">
             <span className="font-semibold">Before: Polling</span> (12,000명, KO 1,590건)
           </figcaption>
-          <img src="/images/polling_12000.png" alt="Polling 부하 테스트 결과" className="w-full h-auto" />
+          <ZoomableImage src="/images/polling_12000.png" alt="Polling 부하 테스트 결과" className="w-full h-auto" />
         </figure>
         <figure className="rounded-md border border-emerald-500/30 overflow-hidden">
           <figcaption className="px-3 py-1.5 bg-emerald-500/10 text-xs text-emerald-300">
             <span className="font-semibold">After: SSE</span> (18,000명, KO 0건)
           </figcaption>
-          <img src="/images/sse_18000.png" alt="SSE 부하 테스트 결과" className="w-full h-auto" />
+          <ZoomableImage src="/images/sse_18000.png" alt="SSE 부하 테스트 결과" className="w-full h-auto" />
         </figure>
       </div>
     </details>
   </div>
-);
+  );
+};
 
 const INDEX_SQL = `CREATE INDEX idx_property_search
 ON p_property (is_visible, property_type, created_at DESC);
@@ -392,13 +424,15 @@ const ISSUES = [
 ];
 
 const IssueCard = ({ issue }) => {
-  const [open, setOpen] = useState(false);
+  const [openState, setOpen] = useState(false);
+  const printing = usePrinting();
+  const open = openState || printing;
 
   return (
     <div className="bg-slate-900/60 rounded-lg border border-slate-800 hover:border-slate-700 transition-colors">
       <button
         type="button"
-        onClick={() => setOpen(!open)}
+        onClick={() => setOpen(!openState)}
         aria-expanded={open}
         className="w-full flex items-start gap-3 p-4 text-left"
       >

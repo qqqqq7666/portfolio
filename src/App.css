@@ -12,4 +12,18 @@
     page-break-inside: avoid;
   }
 
+  img {
+    break-inside: avoid;
+    max-width: 100%;
+  }
+
+  summary {
+    list-style: none;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
 }
