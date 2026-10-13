@@ -1,440 +1,497 @@
 import React, { useState } from 'react';
-import {
-  Github,
-  Mail,
-  ExternalLink,
-  Award,
-  Server,
-  Database,
-  Code,
-  Youtube,
-  BookOpen,
-  ChevronDown,
-  ChevronUp,
-  Activity,
-  CheckCircle,
-  Cloud,
-  Shield,
-  Workflow,
-  TrendingUp,
-  Image as ImageIcon
-} from 'lucide-react';
+import { Github, Mail, ExternalLink, Youtube, BookOpen, ChevronDown } from 'lucide-react';
 
 // --- 데이터 정의 ---
 
+// 프로젝트 전반에서 실제로 반복 사용한 핵심 스택만 유지
 const SKILLS = [
-  {
-    title: 'Language & Framework',
-    icon: <Code size={20} />,
-    skills: ['Java 21', 'Spring Boot 3.x', 'Spring WebFlux', 'Spring Cloud', 'React'],
-    color: 'text-blue-400',
-    bgColor: 'bg-blue-500/10'
-  },
-  {
-    title: 'Database & ORM',
-    icon: <Database size={20} />,
-    skills: ['PostgreSQL', 'MySQL', 'Redis', 'MongoDB', 'Spring Data JPA', 'Spring Data R2DBC'],
-    color: 'text-emerald-400',
-    bgColor: 'bg-emerald-500/10'
-  },
-  {
-    title: 'Architecture & MQ',
-    icon: <Workflow size={20} />,
-    skills: ['MSA (Microservices)', 'Event-Driven (EDA)', 'Apache Kafka', 'Outbox Pattern'],
-    color: 'text-purple-400',
-    bgColor: 'bg-purple-500/10'
-  },
-  {
-    title: 'Infra & DevOps',
-    icon: <Cloud size={20} />,
-    skills: ['Docker / Compose', 'AWS EC2', 'GitHub Actions (CI/CD)'],
-    color: 'text-orange-400',
-    bgColor: 'bg-orange-500/10'
-  },
-  {
-    title: 'Testing & Monitoring',
-    icon: <Activity size={20} />,
-    skills: ['Gatling (Load Testing)', 'Prometheus', 'Grafana', 'JUnit'],
-    color: 'text-rose-400',
-    bgColor: 'bg-rose-500/10'
-  },
-  {
-    title: 'Security & Auth',
-    icon: <Shield size={20} />,
-    skills: ['Spring Security', 'OAuth2', 'JWT'],
-    color: 'text-yellow-400',
-    bgColor: 'bg-yellow-500/10'
-  }
+  { title: 'Backend', color: 'text-blue-400', skills: ['Java 21', 'Spring Boot 3', 'Spring Security', 'Spring Data JPA', 'WebFlux'] },
+  { title: 'Data', color: 'text-emerald-400', skills: ['Redis', 'PostgreSQL', 'MySQL'] },
+  { title: 'Architecture', color: 'text-purple-400', skills: ['MSA', 'Event-Driven', 'Kafka', 'RabbitMQ'] },
+  { title: 'Infra & Test', color: 'text-orange-400', skills: ['Docker', 'AWS EC2', 'Gatling'] }
 ];
 
-const PROJECTS = [
+// 대표 프로젝트: 접힌 상태에서도 summary 한 줄로 핵심이 읽히도록 구성
+const MAIN_PROJECTS = [
   {
-    title: 'TRINIONE (부동산 매물 홍보 랜딩 페이지 및 관리자 대시보드)',
+    title: 'TRINIONE',
+    desc: '부동산 매물 홍보 랜딩 및 관리자 대시보드',
     period: '2026.04 - 2026.06',
-    team: '1명 (개인 프로젝트)',
+    team: '1명 (개인)',
     role: '풀스택 개발',
-    contribution: '기획 100% / 프론트엔드 100% / 백엔드 100%',
-    image: null,
-    links: {
-      url: 'https://trinione.com/',
-    },
-    techStack: ['TypeScript', 'React 19', 'Tailwind CSS 4', 'Vite', 'Hono', 'Cloudflare Workers', 'Cloudflare D1', 'Cloudflare R2', 'Drizzle ORM'],
+    summary: 'Spring Boot로 1차 구축 후 Hono + Cloudflare Workers 서버리스로 마이그레이션, 서버/DB 상시 고정비 0원',
+    links: { url: 'https://trinione.com/' },
+    diagram: '/images/active_diagram/Trinione_API_activity.png',
+    techStack: ['TypeScript', 'React 19', 'Tailwind CSS 4', 'Hono', 'Cloudflare Workers', 'D1', 'R2', 'Drizzle ORM'],
     features: [
-      'React 19와 Tailwind CSS 4를 활용하여 반응형 부동산 매물 홍보 랜딩 페이지 및 고객 문의 접수 폼 구현',
-      'Hono 프레임워크와 Cloudflare Workers를 결합하여 빠르고 가벼운 엣지(Edge) 기반 Serverless API 구축',
-      'Cloudflare D1(SQLite) 및 R2 스토리지를 Drizzle ORM과 연동하여 매물 정보, 태그, 이미지 데이터 관리',
-      'JWT 기반 인증을 통해 관리자 대시보드(/admin)에서 고객 상담 신청 내역 및 매물 정보를 관리(CRUD)할 수 있도록 구현',
-      'Zod를 통한 데이터 유효성 검사 및 Resend API를 이용한 이메일 발송 연동으로 고객 문의 알림 처리'
+      'React 19 + Tailwind 4 반응형 랜딩 및 문의 접수 폼',
+      'Hono + Cloudflare Workers 엣지 API, D1/R2를 Drizzle ORM으로 연동',
+      'JWT 관리자 대시보드(/admin)에서 매물·문의 CRUD',
+      'Zod 유효성 검사, Resend API 이메일 알림'
     ],
-    learnings: [
-      'Cloudflare 생태계(Workers, D1, R2)와 Hono를 결합하여 콜드 스타트가 빠르고 확장성이 높은 Serverless 백엔드 아키텍처를 경험했습니다.',
-      'Vite 환경에서 React 19와 Tailwind CSS 4를 적용하며 최신 프론트엔드 기술 스택을 학습하고, 랜딩 페이지 빌더 등 복잡한 UI를 모듈화하는 방법을 익혔습니다.',
-      '초기 Spring Boot 기반의 백엔드 설계를 Hono와 Cloudflare 인프라로 전환하며, 프레임워크 간의 차이를 이해하고 경량화된 API 설계의 장단점을 체득했습니다.',
-      'Drizzle ORM을 활용하여 Cloudflare D1 환경에서의 타입 안정성을 확보하고, SQL 기반의 데이터베이스 스키마를 코드로 관리하는 경험을 쌓았습니다.'
+    points: [
+      '도메인 규칙을 Spring Boot로 먼저 검증한 뒤 AI 도구(Claude, GPT 등)로 TypeScript/Hono로 이전해 학습 곡선과 개발 기간 단축',
+      '24시간 상시 서버 대신 요청 시 동작하는 엣지 런타임으로 초기 운영 고정비 제거',
+      'D1 Rows Read 폭증 원인을 실행 계획 분석으로 찾아 인덱스 추가로 해결 (하단 Troubleshooting 참고)'
     ]
   },
   {
-    title: '토론하는아이들 (교육 홍보 및 관리자 App 서비스)',
-    period: '2026.02 - 현재 라이브 운영 중',
-    team: '1명 (개인 프로젝트)',
-    role: '풀스택 개발 및 앱 패키징',
-    contribution: '기획 100% / 프론트엔드 100% / 백엔드 100%',
-    image: null, // 실제 사이트 캡쳐 이미지가 있다면 여기에 경로 추가 (예: '/images/thinkmen.png')
-    links: {
-      url: 'https://www.thinkmentutor.com/',
-    },
-    techStack: ['Java', 'Spring Boot', 'Spring Security', 'JWT', 'React', 'Tailwind CSS', 'Capacitor', 'FCM'],
-    features: [
-      'Tailwind CSS를 활용한 반응형 학원 랜딩 페이지 및 상담 문의 접수 폼 구현',
-      'Capacitor를 활용하여 단일 React 코드베이스를 안드로이드 네이티브 앱으로 패키징 및 분기 라우팅 처리',
-      'Firebase Cloud Messaging을 연동하여 새로운 상담 문의 접수 시 관리자 앱으로 실시간 푸시 알림 전송 로직 구현',
-      'JWT 기반 관리자 인증 구현',
-      'Token 만료 시 401 에러를 캐치하여 백그라운드에서 토큰을 재발급하는 인터셉터 로직 적용'
-    ],
-    learnings: [
-      '단일 React 코드베이스 내에서 Capacitor.isNativePlatform() 분기를 통해 웹 환경과 모바일 앱 환경을 효율적으로 분리하고 하이브리드 앱을 구축하는 경험을 했습니다.',
-      'Capacitor를 도입해 웹 프론트엔드 기술만으로 안드로이드 네이티브 기능을 제어하고, 단일 코드베이스로 크로스 플랫폼을 지원하는 효율적인 아키텍처를 경험했습니다.',
-      '새로운 문의가 등록되는 트랜잭션 내에서 백엔드의 FCM API를 호출하여 모바일 기기로 푸시 알림을 발송하는 End-to-End 알림 아키텍처를 체득했습니다.',
-      '푸시 알림 수신 시 Custom Event를 발생시켜 관리자 대시보드의 데이터를 자동으로 갱신하게 함으로써 앱 사용성을 크게 개선했습니다.',
-      'HttpOnly 설정과 SameSite 속성을 활용한 쿠키 기반 Refresh Token 관리 전략을 직접 세우며, XSS 공격을 방어하는 안전한 인증/인가 플로우를 체득했습니다.'
-    ]
-  },
-  {
-    title: 'Bidket (MSA 기반 대규모 C2C 경매 이커머스)',
+    title: 'Bidket',
+    desc: 'MSA 기반 C2C 경매 이커머스',
     period: '2026.01 - 2026.03',
     team: '4명 (팀장)',
-    role: '팀장, 대기열(Queue) 시스템 설계 및 최적화',
-    contribution: '백엔드 40% / 아키텍처 설계 40% / 기획 20%',
+    role: '대기열 시스템 설계 및 최적화',
+    summary: 'Redis ZSet 대기열, Polling → SSE 전환으로 동시 처리 10,000 → 18,000건 (+80%), 에러율 0%',
     links: {
       github: 'https://github.com/Bidket',
       youtube: 'https://youtu.be/_knYIgr7G8c',
       notion: 'https://www.notion.so/Bidket-2df2dc8f74fd81beb86aefdef217ddc9?source=copy_link'
     },
-    techStack: ['Java', 'Spring Boot', 'Spring Cloud', 'Spring WebFlux', 'Spring Data R2DBC', 'Kafka', 'PostgreSQL', 'Redis', 'Docker'],
+    diagram: '/images/active_diagram/Bidket_activity.png',
+    techStack: ['Java', 'Spring Boot', 'Spring Cloud', 'WebFlux', 'R2DBC', 'Kafka', 'PostgreSQL', 'Redis', 'Docker'],
     features: [
-      'Spring Cloud Gateway와 WebFlux를 도입해 블로킹 없는 비동기 처리로 고성능 트래픽 수용 환경을 구축',
-      'Redis ZSet을 활용하여 대기열 진입 순서를 정확히 보장하고, 유동적인 최대 수용 인원 및 초당 진입 허용 수 조절 기능 구현',
-      'Heartbeat API를 통한 비활동 유저 자동 퇴출 및 대기자 입장 로직 구현으로 경매 서버 회전율 극대화',
-      'Outbox Pattern과 DLT를 도입하여 MSA 분산 환경에서의 데이터 정합성 보장'
+      'Spring Cloud Gateway + WebFlux 기반 논블로킹 트래픽 처리',
+      'Redis ZSet 대기열: 진입 순서 보장, 최대 수용 인원 및 초당 진입 수 동적 조절',
+      'Heartbeat API로 비활동 유저 자동 퇴출 후 대기자 입장',
+      'Outbox Pattern + DLT로 분산 환경 데이터 정합성 보장'
     ],
-    learnings: [
-      'Redis 자료구조의 특성을 깊이 분석하여, Heartbeat 갱신 시 Hash 전체의 만료 시간이 연장되던 문제를 ZSet의 Score 기반으로 변경해 만료 세션을 정확히 제어하는 트러블슈팅을 경험했습니다.',
-      'Spring WebFlux와 R2DBC를 활용한 Non-Blocking 아키텍처를 직접 설계하며, 적은 리소스로도 대규모 트래픽을 효율적으로 제어하는 방법을 체득했습니다.',
-      '부하 테스트를 주도하며 기존 Polling 방식의 한계인 소켓 고갈을 인지하고, SSE로 통신 방식을 개선하여 서버 부하를 극적으로 낮추는 최적화 사이클을 완수했습니다.'
+    points: [
+      'Heartbeat 갱신 시 Hash 전체 만료 시간이 연장되던 문제를 ZSet Score 기반으로 변경해 해결',
+      'Gatling 부하 테스트로 Polling의 소켓 고갈을 확인하고 SSE로 전환 (하단 Troubleshooting 참고)'
     ]
   },
   {
-    title: 'Sparta Logistics (MSA 기반 물류 배송 및 주문 관리 플랫폼)',
-    period: '2025.11 - 2025.11',
+    title: 'Sparta Logistics',
+    desc: 'MSA 기반 물류 배송 및 주문 관리 플랫폼',
+    period: '2025.11',
     team: '5명 (팀원)',
-    role: 'MSA 아키텍처 설계 및 비동기 트랜잭션 최적화, 주문 시스템 개발',
-    contribution: '백엔드 40% / 아키텍처 설계 40% / 기획 20%',
+    role: '주문 시스템 개발, 비동기 트랜잭션 설계',
+    summary: 'CQRS, RabbitMQ 이벤트 기반 Saga, Redis 멱등성. 동기 처리 구조를 최종 일관성으로 재설계',
     links: {
       github: 'https://github.com/sparta-logitics/sparta_logistics/tree/dev/order-service',
       notion: 'https://www.notion.so/13-Code-Cargo-2df2dc8f74fd81ab80f2d6e175ea1b74?pvs=12'
     },
-    techStack: ['Java', 'Spring Boot', 'Spring Data JPA', 'QueryDSL', 'RabbitMQ', 'Redis', 'PostgreSQL'],
+    diagram: '/images/active_diagram/sparta_logitics_activity.png',
+    techStack: ['Java', 'Spring Boot', 'JPA', 'QueryDSL', 'RabbitMQ', 'Redis', 'PostgreSQL'],
     features: [
-      'CQRS 패턴을 도입하여 상태를 변경하는 Command와 데이터를 조회하는 Query 로직을 명확히 분리하고, QueryDSL을 활용해 사용자 권한에 따른 동적 주문 목록 조회 API를 구축',
-      'RabbitMQ를 활용한 Event Driven Architecture 및 Saga 패턴을 적용하여, 주문-배송-허브로 이어지는 분산 트랜잭션 환경에서 시스템 간 강한 결합을 끊어내고 장애 전파를 방지',
-      'Redis를 활용해 주문 생성 API에 멱등성을 보장하여 중복 요청을 방지하고, 단건 조회에만 선택적으로 캐시를 적용하여 데이터 일관성과 조회 성능을 동시 확보'
+      'CQRS 분리 + QueryDSL로 사용자 권한별 동적 주문 목록 조회 API',
+      'RabbitMQ EDA + Saga로 주문-배송-허브 분산 트랜잭션 처리, 서비스 간 결합 및 장애 전파 차단',
+      'Redis로 주문 생성 멱등성 보장, 단건 조회에만 선택적 캐시 적용'
     ],
-    learnings: [
-      'MSA 환경에서 물리적 데이터 분리로 인해 HUB_MANAGER의 주문 조회가 불가능했던 문제를 겪었으나, 비동기 응답 메시지를 통해 검색에 필요한 소속 ID를 Order 엔티티에 복제하고 인덱싱하는 비정규화를 수용하여 조회 성능을 극대화하는 트러블슈팅을 경험했습니다.',
-      '주문 생성 시 배송 및 허브 계산까지 모두 동기적으로 처리하려던 초기 구조의 한계(를 인지하고, 큐를 활용한 최종 일관성 구조로 재설계하여 클라이언트가 폴링으로 최종 상태를 확인하도록 API를 개선했습니다.',
-      '주문 서비스와 배송 서비스의 책임을 DDD 관점에서 명확히 분리하며, 서비스 간 독립성을 지키고 보상 트랜잭션의 복잡도를 낮추는 이상적인 MSA 설계 방식을 체득했습니다.'
+    points: [
+      'HUB_MANAGER 주문 조회 불가 문제(데이터 물리 분리)를 비동기 응답으로 소속 ID를 Order에 복제·인덱싱해 해결',
+      '배송·허브 계산까지 동기 처리하던 주문 생성을 큐 기반 최종 일관성으로 재설계, 클라이언트는 폴링으로 상태 확인'
     ]
-  },
+  }
+];
+
+// 그 외 프로젝트: 한 줄 요약 위주
+const OTHER_PROJECTS = [
   {
-    title: '공간 예약 공지 자동화 프로그램',
+    title: '공간 예약 공지 자동화',
+    desc: 'Java 데스크톱 앱',
     period: '2025.10 - 2025.12',
-    team: '1명 (개인 프로젝트)',
-    role: '아키텍처 설계, API 연동 및 데스크톱 앱(GUI) 개발',
-    contribution: '기획 100% / 개발 100%',
-    links: {}, // 깃허브 링크가 있다면 여기에 추가
+    team: '1명 (개인)',
+    role: '설계 및 개발',
+    summary: 'Gemini로 일정 텍스트를 정형화하고 검증 GUI를 거쳐 Discord 공지. 주 1시간 이상 수작업을 10분 이내로 단축',
+    links: {},
     techStack: ['Java 8', 'Swing', 'Jackson', 'Gemini API', 'Power Automate', 'Discord Webhook'],
     features: [
-      'PowerAutomate를 활용하여 MS Planner의 일정 데이터를 정기적으로 추출하고 JSON 형식으로 변환하는 자동화 파이프라인 구축',
-      'Gemini 2.5 Flash API를 연동하여, 비정형적인 일정 설명 텍스트에서 명확한 장소와 목적을 JSON 형태로 추론 및 추출하는 프롬프트 엔지니어링 적용',
-      '기존 예약과의 기간 중복 여부를 검증하고, 우선순위에 따라 공간을 유동적으로 자동 할당하는 PlaceAllocator 알고리즘 구현',
-      'Java Swing을 활용하여 AI가 가공한 데이터를 최종 전송 전 사용자가 직접 확인하고 수정할 수 있는 GUI 검증 도구 개발로 데이터 무결성 확보',
-      'Discord Webhook API를 연동하여 날짜/요일별로 포맷팅된 공지 메시지를 다중 채널로 일괄 전송하는 기능 구현'
+      'Power Automate로 MS Planner 일정 추출, JSON 파이프라인 구축',
+      'Gemini 2.5 Flash로 비정형 설명에서 장소·목적 추출, 중복 검증 후 PlaceAllocator로 우선순위 기반 자동 배정',
+      'AI 환각에 대비한 Swing 검증 GUI, Discord Webhook 다채널 일괄 공지'
     ],
-    learnings: [
-      '단순한 스크립트 기반의 자동화를 넘어, Gemini API를 통해 비정형 텍스트를 정형 데이터로 가공하는 지능형 파이프라인 설계 경험을 쌓았습니다.',
-      'AI 추론에서 발생할 수 있는 환각이나 데이터 오류 리스크에 대비해, Swing 기반의 검증용 UI를 추가함으로써 시스템의 안정성과 회복력을 확보하는 아키텍처를 체득했습니다.',
-      '이기종 플랫폼(MS Planner, Google Gemini, Discord)의 API를 연동하고 Jackson 모듈을 활용하여 복잡한 JSON 데이터를 안전하게 직렬화/역직렬화하는 능력을 길렀습니다.',
-      '수동으로 매주 1시간 이상 소요되던 취합 및 공지 업무와 휴먼 에러를 10분 이내의 프로세스로 단축시켜 실질적인 업무 효율성 개선 성과를 경험했습니다.'
-    ]
+    points: []
   },
   {
-    title: '우리 동네 병원 (위치기반 병원 탐색 및 실시간 상담 서비스)',
+    title: '우리 동네 병원',
+    desc: '위치기반 병원 탐색 및 실시간 상담',
     period: '2025.01 - 2025.02',
     team: '3명 (팀장)',
-    role: '일정/이슈 관리, API 개발 및 페이지 구현 (회원/QnA게시판)',
-    contribution: '백엔드 30% / 프론트엔드 30% / 기획 50%',
+    role: '일정/이슈 관리, 회원·QnA 개발',
+    summary: 'OAuth2 + JWT(HttpOnly 쿠키, Redis) 인증, 의료인 QnA 및 실시간 채팅 상담 (웹서비스 프로젝트 III 대상)',
     links: {
       github: 'https://github.com/qqqqq7666/UriDongneHostpital',
       youtube: 'https://youtu.be/M2rdB4fV2Io',
       notion: 'https://www.notion.so/1a72dc8f74fd80998765c7c1c7f17484?source=copy_link'
     },
+    diagram: '/images/active_diagram/UriDongneHospital_activity.png',
     techStack: ['Java', 'Spring Boot', 'Spring Security', 'JWT', 'OAuth2', 'Kafka', 'MySQL', 'Redis', 'MongoDB', 'AWS EC2'],
     features: [
-      'DataHub 의료인 면허 인증 API 연동 및 주민번호 등 민감정보 Base64 암호화 처리',
-      'OAuth2 (카카오, 네이버, 구글) 간편 로그인 및 회원가입, JWT(HttpOnly 쿠키 + Redis) 기반 인증 구현',
-      'Google SMTP를 활용한 이메일 인증 구현 (URL 전송 방식 및 Redis를 통한 만료 시간 관리)',
-      '인증된 의료인과 일반 사용자 간의 QnA 및 실시간 채팅 상담 기능 구현',
-      'Axios 인터셉터 로직 모듈화를 통한 인증 토큰 처리 및 에러 핸들링 중앙화'
+      'DataHub 의료인 면허 인증 API 연동, 민감정보 Base64 처리',
+      'OAuth2(카카오/네이버/구글) 로그인, Access Token은 HttpOnly 쿠키, Refresh Token은 Redis 저장',
+      'Google SMTP 이메일 인증 (Redis로 만료 관리)',
+      '의료인-일반 사용자 QnA 및 실시간 채팅 상담'
     ],
-    learnings: [
-      '세션 인증이 아닌 JWT 토큰 인증 방식을 적용하고, AccessToken은 HttpOnly 쿠키에, RefreshToken은 Redis에 저장하여 보안성과 동시성을 제어하는 방법을 깊이 있게 학습했습니다.',
-      'OAuth2LoginAuthenticationFilter 및 OAuth2LoginHandler를 직접 구현하여 로그인 성공/실패에 따른 세밀한 로직 제어를 경험했습니다.',
-      'Facade 패턴을 적용하여 여러 Repository가 주입되는 서비스의 복잡도를 낮추고 테스트 코드 작성의 용이성과 가독성을 크게 향상시켰습니다.'
+    points: [
+      'OAuth2 로그인 필터·핸들러 직접 구현으로 성공/실패 로직 제어',
+      'Facade 패턴으로 다중 Repository 서비스의 복잡도와 테스트 부담 완화'
     ]
   },
   {
-    title: 'Eclipse (의류 쇼핑몰 웹 서비스)',
+    title: 'Eclipse',
+    desc: '의류 쇼핑몰 웹 서비스',
     period: '2024.12 - 2025.01',
     team: '5명 (팀장)',
-    role: '일정/이슈 관리, 주문/결제/장바구니/포인트 API 및 페이지 개발',
-    contribution: '백엔드 40% / 프론트엔드 30% / 기획 20%',
-    image: '/src/images/eclipse2.png',
+    role: '일정/이슈 관리, 주문·결제·장바구니·포인트 개발',
+    summary: 'PortOne 결제, 주문, 포인트 API 개발. (웹서비스 프로젝트 II 최우수상)',
     links: {
       github: 'https://github.com/qqqqq7666/Eclipse',
       youtube: 'https://www.youtube.com/watch?v=NAT9cQk_lrc',
       notion: 'https://www.notion.so/Eclipse-1742dc8f74fd80d2a0d1ddff49d08bd5?source=copy_link'
     },
+    diagram: '/images/active_diagram/Eclipse_activity.png',
     techStack: ['Java 21', 'Spring Boot', 'Spring Security', 'JWT', 'OAuth2', 'MySQL', 'Redis', 'AWS EC2'],
     features: [
-      'PortOne 통합 결제 API 연동 및 결제 정보 데이터 가공, 카카오 우편번호 찾기 API 연동',
-      '주문 상태/사용자 이메일 별 주문 조회 및 구매 확정 시 1% 포인트 자동 적립 로직 구현',
-      '포인트 내역(전체/적립/사용) 조회 및 관리자 권한의 포인트 지급/회수 기능 구현',
-      '장바구니 상품 정보를 LocalStorage에 저장하고 내부에서 옵션 변경이 가능하도록 구현'
+      'PortOne 통합 결제 및 카카오 우편번호 API 연동',
+      '주문 조회, 구매 확정 시 1% 포인트 자동 적립, 관리자 포인트 지급/회수',
+      '장바구니 LocalStorage 저장 및 옵션 변경'
     ],
-    learnings: [
-      '외부 API(PortOne, 카카오)를 활용해 클라이언트와 백엔드 API 간의 데이터 흐름과 RestController의 실질적인 활용법을 깊이 이해했습니다.',
-      '직접 RDB를 설계하고 테이블 간의 관계를 설정하며 여러 시행착오를 통해 효율적인 데이터베이스 구조를 도출했습니다.',
-      '프로그램 전반의 테스트 코드를 작성하며 코드 아키텍처 설계의 중요성을 체감했습니다.',
-      'GitLab을 활용한 협업과 팀장으로서의 일정/이슈 관리 경험을 통해 프로젝트 최우수상을 수상하는 성과를 이뤘습니다.'
+    points: [
+      'PortOne, 카카오 외부 API 연동으로 클라이언트-백엔드 간 데이터 흐름 설계',
+      'RDB를 직접 설계하며 시행착오 끝에 테이블 관계 구조 도출, 전반적인 테스트 코드 작성',
+      'GitLab 협업 및 팀장으로서 일정·이슈 관리 (프로젝트 최우수상)'
     ]
   }
 ];
 
 const AWARDS = [
-  {
-    title: '엘리스 트랙 리더스파크상 (리더십 부문 수상)',
-    date: '2025.03.21',
-    issuer: '(주)엘리스',
-    description: '명확한 비전과 목표로 팀을 이끌어 프로젝트를 성공적으로 완수한 리더십을 인정받아 수상'
-  },
-  {
-    title: '웹서비스 프로젝트 III 대상',
-    date: '2025.03',
-    issuer: '(주)엘리스',
-    description: '엘리스 클라우드 트랙 웹서비스 프로젝트 III 우수 성적 완수'
-  },
-  {
-    title: '웹서비스 프로젝트 II 최우수상',
-    date: '2025.01.21',
-    issuer: '(주)엘리스',
-    description: 'Eclipse 팀 프로젝트의 성공적인 구축 및 우수 성적 달성'
-  }
+  { title: '엘리스 트랙 리더스파크상 (리더십)', date: '2025.03' },
+  { title: '웹서비스 프로젝트 III 대상', date: '2025.03' },
+  { title: '웹서비스 프로젝트 II 최우수상 (Eclipse)', date: '2025.01' }
 ];
 
 // --- 컴포넌트 ---
 
-const ProjectCard = ({ project }) => {
-  const [isOpen, setIsOpen] = useState(false);
+const IconLink = ({ href, title, primary, children }) => (
+  <a
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    title={title}
+    className={`p-1.5 rounded-md transition-colors ${
+      primary ? 'bg-indigo-600 hover:bg-indigo-500 text-white' : 'bg-slate-800 hover:bg-slate-700 text-slate-300'
+    }`}
+  >
+    {children}
+  </a>
+);
+
+const SectionTitle = ({ children }) => (
+  <h2 className="text-xl font-bold text-white mb-4">{children}</h2>
+);
+
+const ProjectCard = ({ project, sub = false }) => {
+  const [open, setOpen] = useState(false);
+  const { links } = project;
 
   return (
-    <div className="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-indigo-500/10 hover:border-indigo-500/30">
-
-      {/* 썸네일 이미지 영역
-      <div className="w-full h-48 md:h-64 bg-slate-900 border-b border-slate-700 relative group overflow-hidden">
-        {project.image ? (
-          <img 
-            src={project.image} 
-            alt={`${project.title} 썸네일`} 
-            className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-300 group-hover:scale-105 transform"
-          />
-        ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center text-slate-600 bg-slate-800/50">
-            <ImageIcon size={48} className="mb-3 opacity-50" />
-            <span className="text-sm font-medium">프로젝트 썸네일 이미지를 등록해주세요</span>
-          </div>
-        )}
-      </div> */}
-
-      <div className="p-6 md:p-8">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
-          <div>
-            <h3 className="text-2xl font-bold text-slate-100">{project.title}</h3>
-            <p className="text-slate-400 mt-1">{project.period} | {project.team}</p>
-          </div>
-          <div className="flex space-x-3">
-            {/* Live URL Link 버튼 추가 */}
-            {project.links.url && (
-              <a href={project.links.url} target="_blank" rel="noopener noreferrer" className="p-2 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-white shadow-lg shadow-indigo-500/20 transition-all tooltip" title="Live Website">
-                <ExternalLink size={20} />
-              </a>
-            )}
-            {project.links.github && (
-              <a href={project.links.github} target="_blank" rel="noopener noreferrer" className="p-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-slate-200 transition-colors tooltip" title="GitHub">
-                <Github size={20} />
-              </a>
-            )}
-            {project.links.youtube && (
-              <a href={project.links.youtube} target="_blank" rel="noopener noreferrer" className="p-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-slate-200 transition-colors" title="YouTube Demo">
-                <Youtube size={20} />
-              </a>
-            )}
-            {project.links.notion && (
-              <a href={project.links.notion} target="_blank" rel="noopener noreferrer" className="p-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-slate-200 transition-colors" title="Trouble Shooting">
-                <BookOpen size={20} />
-              </a>
-            )}
-          </div>
-        </div>
-
-        <div className="mb-6">
-          <p className="text-slate-300 font-medium">담당 역할: <span className="text-indigo-400">{project.role}</span></p>
-          <p className="text-slate-400 text-sm mt-1">기여도: {project.contribution}</p>
-        </div>
-
-        <div className="flex flex-wrap gap-2 mb-6">
-          {project.techStack.map((tech, idx) => (
-            <span key={idx} className="px-3 py-1 bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 rounded-full text-xs font-medium">
-              {tech}
-            </span>
-          ))}
-        </div>
-
+    <div className="bg-slate-900/60 rounded-lg border border-slate-800 hover:border-slate-700 transition-colors">
+      <div className="flex items-start gap-3 p-4">
         <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center text-sm font-medium text-slate-400 hover:text-slate-200 transition-colors w-full justify-between border-t border-slate-700 pt-4"
+          type="button"
+          onClick={() => setOpen(!open)}
+          aria-expanded={open}
+          className="flex-1 min-w-0 text-left"
         >
-          <span>프로젝트 상세 내용 보기</span>
-          {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+          <div className="flex flex-wrap items-baseline gap-x-2">
+            <h3 className={`font-bold text-slate-100 ${sub ? 'text-base' : 'text-lg'}`}>{project.title}</h3>
+            <span className="text-sm text-slate-500">{project.desc}</span>
+          </div>
+          <p className="text-xs text-slate-500 mt-1">
+            {project.period} | {project.team} | {project.role}
+          </p>
+          <p className="text-sm text-slate-300 mt-2 leading-relaxed">{project.summary}</p>
         </button>
 
-        {isOpen && (
-          <div className="mt-6 space-y-6 animate-in slide-in-from-top-4 fade-in duration-300">
-            <div>
-              <h4 className="text-lg font-semibold text-slate-200 mb-3 flex items-center">
-                <CheckCircle size={18} className="mr-2 text-indigo-400" />
-                주요 구현 기능
-              </h4>
-              <ul className="space-y-2">
-                {project.features.map((feature, idx) => (
-                  <li key={idx} className="flex items-start text-slate-300 text-sm">
-                    <span className="mr-2 mt-1 w-1.5 h-1.5 bg-indigo-400 rounded-full flex-shrink-0"></span>
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="text-lg font-semibold text-slate-200 mb-3 flex items-center">
-                <Code size={18} className="mr-2 text-indigo-400" />
-                프로젝트를 통해 체득한 점
-              </h4>
-              <ul className="space-y-2">
-                {project.learnings.map((learning, idx) => (
-                  <li key={idx} className="flex items-start text-slate-300 text-sm bg-slate-700/30 p-3 rounded-lg border border-slate-700/50">
-                    <span>{learning}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        )}
+        <div className="flex items-center gap-1.5 shrink-0">
+          {links.url && (
+            <IconLink href={links.url} title="Live Website" primary>
+              <ExternalLink size={16} />
+            </IconLink>
+          )}
+          {links.github && (
+            <IconLink href={links.github} title="GitHub">
+              <Github size={16} />
+            </IconLink>
+          )}
+          {links.youtube && (
+            <IconLink href={links.youtube} title="YouTube Demo">
+              <Youtube size={16} />
+            </IconLink>
+          )}
+          {links.notion && (
+            <IconLink href={links.notion} title="Trouble Shooting">
+              <BookOpen size={16} />
+            </IconLink>
+          )}
+          <button
+            type="button"
+            onClick={() => setOpen(!open)}
+            aria-label={open ? '상세 접기' : '상세 보기'}
+            className="p-1.5 text-slate-500 hover:text-slate-200 transition-colors"
+          >
+            <ChevronDown size={18} className={`transition-transform ${open ? 'rotate-180' : ''}`} />
+          </button>
+        </div>
       </div>
+
+      {open && (
+        <div className="border-t border-slate-800 px-4 pb-4 pt-3 space-y-3">
+          <div className="flex flex-wrap gap-1.5">
+            {project.techStack.map((tech) => (
+              <span key={tech} className="px-2 py-0.5 bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 rounded text-[11px]">
+                {tech}
+              </span>
+            ))}
+          </div>
+
+          <ul className="space-y-1 text-sm text-slate-300">
+            {project.features.map((f) => (
+              <li key={f} className="flex items-start">
+                <span className="mr-2 mt-2 w-1 h-1 bg-indigo-400 rounded-full shrink-0" />
+                <span>{f}</span>
+              </li>
+            ))}
+          </ul>
+
+          {project.points.length > 0 && (
+            <div className="bg-slate-800/50 rounded-md p-3">
+              <p className="text-xs font-semibold text-slate-400 mb-1">핵심 포인트</p>
+              <ul className="space-y-1 text-sm text-slate-300">
+                {project.points.map((p) => (
+                  <li key={p} className="flex items-start">
+                    <span className="mr-2 mt-2 w-1 h-1 bg-slate-500 rounded-full shrink-0" />
+                    <span>{p}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {project.diagram && (
+            <details>
+              <summary className="cursor-pointer text-xs text-slate-500 hover:text-slate-300 transition-colors">
+                활동 다이어그램 보기
+              </summary>
+              <img
+                src={project.diagram}
+                alt={`${project.title} 활동 다이어그램`}
+                loading="lazy"
+                className="mt-3 w-full h-auto rounded-md border border-slate-800"
+              />
+            </details>
+          )}
+        </div>
+      )}
     </div>
   );
 };
 
+const PollingVsSse = () => (
+  <div>
+    <div className="overflow-x-auto">
+      <table className="w-full text-sm text-left">
+        <thead className="text-slate-500 text-xs">
+          <tr>
+            <th className="py-1.5 pr-4 font-medium"></th>
+            <th className="py-1.5 pr-4 font-medium">Polling (12,000)</th>
+            <th className="py-1.5 font-medium">SSE (18,000)</th>
+          </tr>
+        </thead>
+        <tbody className="text-slate-300 divide-y divide-slate-800">
+          <tr>
+            <td className="py-1.5 pr-4 text-slate-500">요청 결과</td>
+            <td className="py-1.5 pr-4">Total 703,479건</td>
+            <td className="py-1.5">Connect 18,000건 성공</td>
+          </tr>
+          <tr>
+            <td className="py-1.5 pr-4 text-slate-500">실패 (KO)</td>
+            <td className="py-1.5 pr-4 text-rose-400">1,590건 (Address already in use)</td>
+            <td className="py-1.5 text-emerald-400">0건</td>
+          </tr>
+          <tr>
+            <td className="py-1.5 pr-4 text-slate-500">평균 응답 시간</td>
+            <td className="py-1.5 pr-4">264ms</td>
+            <td className="py-1.5 text-emerald-400">15 ~ 34ms</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <details className="mt-3">
+      <summary className="cursor-pointer text-xs text-slate-500 hover:text-slate-300 transition-colors">
+        부하 테스트 캡처 보기
+      </summary>
+      <div className="grid md:grid-cols-2 gap-4 mt-3">
+        <figure className="rounded-md border border-rose-500/30 overflow-hidden">
+          <figcaption className="px-3 py-1.5 bg-rose-500/10 text-xs text-rose-300">
+            <span className="font-semibold">Before: Polling</span> (12,000 요청, KO 1,590건)
+          </figcaption>
+          <img src="/images/polling_12000.png" alt="Polling 부하 테스트 결과" className="w-full h-auto" />
+        </figure>
+        <figure className="rounded-md border border-emerald-500/30 overflow-hidden">
+          <figcaption className="px-3 py-1.5 bg-emerald-500/10 text-xs text-emerald-300">
+            <span className="font-semibold">After: SSE</span> (18,000 연결, KO 0건)
+          </figcaption>
+          <img src="/images/sse_18000.png" alt="SSE 부하 테스트 결과" className="w-full h-auto" />
+        </figure>
+      </div>
+    </details>
+  </div>
+);
+
+const INDEX_SQL = `CREATE INDEX idx_property_search
+ON p_property (is_visible, property_type, created_at DESC);
+
+CREATE INDEX idx_property_image_pid_sort
+ON p_property_image (property_id, sort_order);
+
+CREATE INDEX idx_property_tag_pid
+ON p_property_tag (property_id);`;
+
+const ISSUES = [
+  {
+    title: 'Polling → SSE 전환, 대기열 처리량 개선',
+    project: 'Bidket',
+    summary: '동시 처리 12,000 → 18,000건 (+80%), 에러율 0%. Gatling 부하 테스트로 Polling의 한계를 확인하고 SSE로 전환',
+    rows: [
+      { label: '문제', content: '폴링 방식 부하 테스트(12,000명)에서 상태 조회 요청이 전체의 94%(65만 건)를 차지했고, 잦은 커넥션 생성으로 KO 1,590건(Address already in use) 발생' },
+      { label: '해결', content: 'SSE 단방향 스트림으로 전환해 반복 요청과 연결 생성·해제 제거, Redis Lua Script로 대기열 연산의 원자성 보장' }
+    ],
+    extra: <PollingVsSse />
+  },
+  {
+    title: 'D1 Rows Read 폭증, 인덱스 튜닝',
+    project: 'TRINIONE',
+    summary: '매물 200건인데 Rows read 4.7억. 실행 계획 분석 후 복합 인덱스 3개로 풀 스캔과 Temp B-Tree 제거',
+    rows: [
+      {
+        label: '문제',
+        content: 'D1 무료 한도(일 5M Rows Read) 초과 경고. 데이터 200여 건인데 Rows read는 472.58M, 매물 목록 쿼리는 54회 실행에 14.67M 발생'
+      },
+      {
+        label: '원인',
+        content: [
+          '매물 조회 조건(is_visible, property_type)에 인덱스가 없어 풀 스캔',
+          '이미지·태그 상관 서브쿼리가 property_id 인덱스 없이 매물 수만큼 반복 풀 스캔',
+          'ORDER BY 인덱스 부재로 Temp B-Tree 정렬 발생'
+        ]
+      },
+      { label: '해결', content: '조건, 정렬, 서브쿼리 컬럼 기준 복합 인덱스 3개 생성', code: INDEX_SQL },
+      {
+        label: '결과',
+        content: '실행 계획이 SCAN에서 SEARCH로 전환, 스캔량이 반환 건수 수준으로 감소 (99.9% 이상 절감)'
+      },
+      {
+        label: '배운 점',
+        content: '쿼리 패턴과 인덱스 전략은 세트로 설계. 상관 서브쿼리도 DB 내부 N+1이라 인덱스가 없으면 I/O가 급증'
+      }
+    ]
+  }
+];
+
+const IssueCard = ({ issue }) => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="bg-slate-900/60 rounded-lg border border-slate-800 hover:border-slate-700 transition-colors">
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        aria-expanded={open}
+        className="w-full flex items-start gap-3 p-4 text-left"
+      >
+        <div className="flex-1 min-w-0">
+          <div className="flex flex-wrap items-baseline gap-x-2">
+            <h3 className="text-base font-bold text-slate-100">{issue.title}</h3>
+            <span className="text-sm text-slate-500">{issue.project}</span>
+          </div>
+          <p className="text-sm text-slate-300 mt-1.5 leading-relaxed">{issue.summary}</p>
+        </div>
+        <ChevronDown size={18} className={`mt-1 shrink-0 text-slate-500 transition-transform ${open ? 'rotate-180' : ''}`} />
+      </button>
+
+      {open && (
+        <div className="border-t border-slate-800 px-4 pb-4 pt-3 space-y-3">
+          <dl className="space-y-2 text-sm">
+            {issue.rows.map((r) => (
+              <div key={r.label} className="flex flex-col sm:flex-row sm:gap-4">
+                <dt className="w-14 shrink-0 text-slate-500">{r.label}</dt>
+                <dd className="min-w-0 flex-1 text-slate-300 leading-relaxed">
+                  {Array.isArray(r.content) ? (
+                    <ul className="space-y-1">
+                      {r.content.map((c) => (
+                        <li key={c} className="flex items-start">
+                          <span className="mr-2 mt-2 w-1 h-1 bg-slate-500 rounded-full shrink-0" />
+                          <span>{c}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    r.content
+                  )}
+                  {r.code && (
+                    <pre className="mt-2 overflow-x-auto bg-slate-950 border border-slate-800 rounded-md p-3 text-xs text-slate-300 leading-relaxed">
+                      <code>{r.code}</code>
+                    </pre>
+                  )}
+                </dd>
+              </div>
+            ))}
+          </dl>
+          {issue.extra}
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default function App() {
   return (
     <div className="min-h-screen bg-slate-950 font-sans text-slate-200 selection:bg-indigo-500/30">
-
-      {/* Header / Hero Section */}
-      <header className="relative pt-24 pb-16 md:pt-32 md:pb-24 px-6 md:px-12 max-w-6xl mx-auto border-b border-slate-800">
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl"></div>
-        </div>
-
-        <div className="max-w-4xl">
-          <h1 className="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-6">
-            진경천 <span className="text-2xl md:text-3xl font-bold text-indigo-400 tracking-wide">
-              WEB BACKEND DEVELOPER
-            </span><br />
-          </h1>
-          <p className="text-xl md:text-2xl text-slate-400 leading-relaxed mb-8 max-w-2xl">
-            일관된 설계 규약으로 팀의 코드 통일성을 확보하고,<br className="hidden md:block" />
-            탄탄한 구조 위에서 건강하게 동작하는 서비스를 만듭니다.
-          </p>
-
-          <div className="flex flex-wrap gap-4">
-            <a href="mailto:rudcjs335@gmail.com" className="flex items-center px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-all shadow-lg shadow-indigo-500/20">
-              <Mail size={18} className="mr-2" />
-              Email
-            </a>
-            <a href="https://github.com/qqqqq7666" target="_blank" rel="noopener noreferrer" className="flex items-center px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg font-medium border border-slate-700 transition-all">
-              <Github size={18} className="mr-2" />
-              GitHub
-            </a>
-          </div>
+      {/* Header */}
+      <header className="max-w-5xl mx-auto px-6 pt-14 pb-8 border-b border-slate-800">
+        <h1 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight">
+          진경천{' '}
+          <span className="text-lg md:text-xl font-bold text-indigo-400 tracking-wide">WEB BACKEND DEVELOPER</span>
+        </h1>
+        <p className="text-base md:text-lg text-slate-400 leading-relaxed mt-4 max-w-2xl">
+          일관된 설계 규약으로 팀의 코드 통일성을 확보하고,
+          <br className="hidden md:block" />
+          탄탄한 구조 위에서 건강하게 동작하는 서비스를 만듭니다.
+        </p>
+        <div className="flex gap-3 mt-5">
+          <a
+            href="mailto:rudcjs335@gmail.com"
+            className="flex items-center px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-sm font-medium transition-colors"
+          >
+            <Mail size={16} className="mr-2" />
+            Email
+          </a>
+          <a
+            href="https://github.com/qqqqq7666"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-md text-sm font-medium border border-slate-700 transition-colors"
+          >
+            <Github size={16} className="mr-2" />
+            GitHub
+          </a>
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-6 md:px-12 py-16 md:py-24 space-y-24">
-
-        {/* Skills Section */}
+      <main className="max-w-5xl mx-auto px-6 py-10 space-y-12">
+        {/* Tech Stack */}
         <section>
-          <div className="flex items-center mb-8">
-            <Server className="text-indigo-400 mr-3" size={28} />
-            <h2 className="text-3xl font-bold text-white">Tech Stack</h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {SKILLS.map((category, idx) => (
-              <div key={idx} className="bg-slate-900/60 p-6 rounded-2xl border border-slate-800 hover:border-slate-700 transition-colors">
-                <h3 className={`text-lg font-bold mb-5 flex items-center gap-3 ${category.color}`}>
-                  <div className={`p-2 rounded-xl ${category.bgColor}`}>
-                    {category.icon}
-                  </div>
-                  {category.title}
-                </h3>
-                <div className="flex flex-wrap gap-2.5">
-                  {category.skills.map((skill, sIdx) => (
-                    <span
-                      key={sIdx}
-                      className="px-3 py-1.5 bg-slate-800 text-slate-300 border border-slate-700 rounded-lg text-sm font-medium hover:bg-slate-700 hover:text-white transition-colors"
-                    >
-                      {skill}
+          <SectionTitle>Tech Stack</SectionTitle>
+          <div className="bg-slate-900/60 border border-slate-800 rounded-lg divide-y divide-slate-800">
+            {SKILLS.map((cat) => (
+              <div key={cat.title} className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-4 px-4 py-2.5">
+                <span className={`w-32 shrink-0 text-sm font-semibold ${cat.color}`}>{cat.title}</span>
+                <div className="flex flex-wrap gap-1.5">
+                  {cat.skills.map((s) => (
+                    <span key={s} className="px-2 py-0.5 bg-slate-800 text-slate-300 border border-slate-700 rounded text-xs">
+                      {s}
                     </span>
                   ))}
                 </div>
@@ -443,167 +500,45 @@ export default function App() {
           </div>
         </section>
 
-        {/* Projects Section */}
+        {/* Projects */}
         <section>
-          <div className="flex items-center mb-8">
-            <Code className="text-indigo-400 mr-3" size={28} />
-            <h2 className="text-3xl font-bold text-white">Projects</h2>
+          <SectionTitle>Projects</SectionTitle>
+          <div className="space-y-3">
+            {MAIN_PROJECTS.map((p) => (
+              <ProjectCard key={p.title} project={p} />
+            ))}
           </div>
 
-          <div className="space-y-8">
-            {PROJECTS.map((project, idx) => (
-              <ProjectCard key={idx} project={project} />
+          <h3 className="text-sm font-semibold text-slate-400 mt-8 mb-3">Other Projects</h3>
+          <div className="space-y-2">
+            {OTHER_PROJECTS.map((p) => (
+              <ProjectCard key={p.title} project={p} sub />
             ))}
           </div>
         </section>
 
-        {/* TRINIONE Migration Section */}
-        <section className="relative">
-          <div className="absolute -inset-4 bg-gradient-to-r from-emerald-500/10 to-teal-500/10 rounded-3xl blur-xl -z-10"></div>
-          <div className="bg-slate-900/80 p-8 rounded-2xl border border-emerald-500/20 shadow-2xl">
-            <div className="flex items-center mb-6">
-              <Cloud className="text-emerald-400 mr-3" size={28} />
-              <h2 className="text-2xl font-bold text-white">비용 최적화 및 서버리스 아키텍처 전환 (TRINIONE 프로젝트)</h2>
-            </div>
-            <p className="text-slate-300 mb-6 leading-relaxed">
-              기존 Java Spring Boot 기반으로 구축했던 백엔드를 Hono 프레임워크와 Cloudflare 생태계(Workers, D1, R2) 기반의 Serverless 아키텍처로 마이그레이션하여 서버 유지 비용 문제를 극적으로 해결했습니다.
-            </p>
-
-            <div className="mb-8 flex flex-col md:flex-row items-start md:items-center p-5 bg-emerald-500/10 border border-emerald-500/30 rounded-xl">
-              <div className="flex-shrink-0 mb-4 md:mb-0 md:mr-5 p-3 bg-emerald-500/20 rounded-xl">
-                <TrendingUp className="text-emerald-400" size={32} />
-              </div>
-              <div>
-                <h4 className="text-xl font-bold text-emerald-300 mb-1">💡 인프라 유지 비용 100% 절감 및 확장성 확보</h4>
-                <p className="text-slate-300 text-sm leading-relaxed">
-                  24시간 상시 가동되어야 하는 서버 및 DB 유지 비용의 부담을 줄이기 위해 요청 시에만 동작하는 <b>Edge Serverless 컴퓨팅</b> 환경으로 전환했습니다.
-                  결과적으로 <strong className="text-white">초기 서비스 운영 단계에서 발생하는 인프라 고정 비용을 0원으로 단축</strong>시켰으며, 글로벌 엣지 네트워크를 통한 빠른 응답 속도까지 확보했습니다.
-                </p>
-              </div>
-            </div>
-
-            <div className="mb-8 flex flex-col md:flex-row items-start md:items-center p-5 bg-teal-500/10 border border-teal-500/30 rounded-xl">
-              <div className="flex-shrink-0 mb-4 md:mb-0 md:mr-5 p-3 bg-teal-500/20 rounded-xl">
-                <Workflow className="text-teal-400" size={32} />
-              </div>
-              <div>
-                <h4 className="text-xl font-bold text-teal-300 mb-1">🤖 AI 페어 프로그래밍을 활용한 신속한 마이그레이션 전략</h4>
-                <p className="text-slate-300 text-sm leading-relaxed">
-                  초기에는 가장 익숙하고 구조화에 유리한 <b>Java Spring Boot</b>로 핵심 비즈니스 로직과 API를 빠르고 견고하게 1차 구축하여 도메인 규칙을 확립했습니다. 
-                  이후 <b>AI 도구(Claude, GPT 등)를 적극 활용하여, 검증된 Spring 코드를 TypeScript 및 Hono 프레임워크 기반으로 마이그레이션</b>했습니다.
-                  이를 통해 <strong className="text-white">새로운 기술 생태계(Edge, Serverless)로 진입하는 학습 곡선과 전체 개발 기간을 대폭 단축</strong>시켰으며, 전환 과정에서 비동기 처리 및 Serverless 환경에 최적화된 아키텍처로 리팩토링을 완수했습니다.
-                </p>
-              </div>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-slate-800/80 p-6 rounded-xl border border-slate-700 flex flex-col">
-                <h3 className="text-lg font-semibold text-slate-300 mb-2">기존: Java Spring Boot</h3>
-                <p className="text-sm text-slate-400 mb-4">안정적인 객체 지향적 설계와 풍부한 생태계를 가졌으나, 소규모 서비스 초기 운영 시 인프라 고정 비용이 지속적으로 발생</p>
-                <ul className="text-sm text-slate-300 space-y-2 mt-auto">
-                  <li className="flex items-start"><span className="w-1.5 h-1.5 bg-slate-500 rounded-full mr-2 mt-1.5 flex-shrink-0"></span> <span>AWS EC2 등 기반 24시간 서버 상시 가동</span></li>
-                  <li className="flex items-start"><span className="w-1.5 h-1.5 bg-slate-500 rounded-full mr-2 mt-1.5 flex-shrink-0"></span> <span>관계형 DB(RDS 등) 인스턴스 호스팅 비용 발생</span></li>
-                  <li className="flex items-start"><span className="w-1.5 h-1.5 bg-slate-500 rounded-full mr-2 mt-1.5 flex-shrink-0"></span> <span>Spring의 다소 무거운 초기 구동 속도로 인한 Serverless 도입 한계</span></li>
-                </ul>
-              </div>
-
-              <div className="bg-slate-800/80 p-6 rounded-xl border border-emerald-500/20 flex flex-col">
-                <h3 className="text-lg font-semibold text-emerald-300 mb-2">개선: Hono + Cloudflare (Serverless)</h3>
-                <p className="text-sm text-slate-400 mb-4">가볍고 빠른 엣지 런타임과 완전 관리형 Serverless 인프라를 통한 비용 효율 극대화</p>
-                <ul className="text-sm text-slate-300 space-y-2 mt-auto">
-                  <li className="flex items-start"><span className="w-1.5 h-1.5 bg-emerald-400 rounded-full mr-2 mt-1.5 flex-shrink-0"></span> <span>Cloudflare Workers를 활용한 Edge 기반 API 배포</span></li>
-                  <li className="flex items-start"><span className="w-1.5 h-1.5 bg-emerald-400 rounded-full mr-2 mt-1.5 flex-shrink-0"></span> <span>D1 (SQLite) 및 R2 채택으로 DB/스토리지 유지 비용 해결</span></li>
-                  <li className="flex items-start"><span className="w-1.5 h-1.5 bg-emerald-400 rounded-full mr-2 mt-1.5 flex-shrink-0"></span> <span>초경량 프레임워크 Hono 도입으로 빠른 Cold Start 및 응답 달성</span></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Load Testing / Performance Section */}
-        <section className="relative">
-          <div className="absolute -inset-4 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 rounded-3xl blur-xl -z-10"></div>
-          <div className="bg-slate-900/80 p-8 rounded-2xl border border-indigo-500/20 shadow-2xl">
-            <div className="flex items-center mb-6">
-              <Activity className="text-indigo-400 mr-3" size={28} />
-              <h2 className="text-2xl font-bold text-white">대기열 서버 성능 최적화 (Bidket 프로젝트)</h2>
-            </div>
-            <p className="text-slate-300 mb-6 leading-relaxed">
-              경매 진입 시 발생하는 대규모 트래픽을 제어하기 위해 WebFlux와 Redis 기반의 대기열 시스템을 구축하고,
-              Gatling을 활용해 Polling 방식과 SSE 방식의 성능을 비교 검증 및 최적화했습니다.
-            </p>
-
-            <div className="mb-8 flex flex-col md:flex-row items-start md:items-center p-5 bg-indigo-500/10 border border-indigo-500/30 rounded-xl">
-              <div className="flex-shrink-0 mb-4 md:mb-0 md:mr-5 p-3 bg-indigo-500/20 rounded-xl">
-                <TrendingUp className="text-indigo-400" size={32} />
-              </div>
-              <div>
-                <h4 className="text-xl font-bold text-indigo-300 mb-1">🚀 서버 처리량 80% 이상 증가</h4>
-                <p className="text-slate-300 text-sm leading-relaxed">
-                  동일한 인프라 환경에서 지속적인 HTTP 요청 병목을 <b>SSE 단방향 스트림</b>과 <b>Lua-Script</b>를 활용하여,
-                  <br /><strong className="text-white"> 안정적인 동시 처리 요청 수를 10,000건에서 18,000건으로 80% 이상 향상</strong>시켰으며 에러율을 <strong className="text-emerald-400">0%</strong>로 완벽히 개선했습니다.
-                </p>
-              </div>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-slate-800/80 p-6 rounded-xl border border-rose-500/20 flex flex-col">
-                <h3 className="text-lg font-semibold text-rose-300 mb-2">기존 방식: Polling (12,000 Requests - 실패 지점)</h3>
-                <p className="text-sm text-slate-400 mb-4">지속적인 HTTP 요청으로 인한 서버 리소스 낭비 및 에러 발생</p>
-                <div className="mb-5 rounded-lg overflow-hidden border border-slate-700 bg-slate-900">
-                  <img src="/images/polling_12000.png" alt="Polling 부하 테스트 결과" className="w-full h-auto object-cover opacity-90 hover:opacity-100 transition-opacity" />
-                </div>
-                <ul className="text-sm text-slate-300 space-y-2 mt-auto">
-                  <li>• Total Requests: 703,479건</li>
-                  <li>• KO (실패): <span className="text-rose-400 font-bold">1,590건 발생</span></li>
-                  <li>• 이슈: <code className="bg-slate-900 px-1 py-0.5 rounded text-rose-300">Address already in use</code> 소켓 고갈 에러</li>
-                  <li>• 평균 응답 시간: 264ms</li>
-                </ul>
-              </div>
-
-              <div className="bg-slate-800/80 p-6 rounded-xl border border-emerald-500/20 flex flex-col">
-                <h3 className="text-lg font-semibold text-emerald-300 mb-2">개선 방식: SSE 도입 (18,000 Requests)</h3>
-                <p className="text-sm text-slate-400 mb-4">단방향 이벤트 스트림(Server-Sent Events)으로 트래픽 최적화</p>
-                <div className="mb-5 rounded-lg overflow-hidden border border-slate-700 bg-slate-900">
-                  <img src="/images/sse_18000.png" alt="SSE 부하 테스트 결과" className="w-full h-auto object-cover opacity-90 hover:opacity-100 transition-opacity" />
-                </div>
-                <ul className="text-sm text-slate-300 space-y-2 mt-auto">
-                  <li>• SSE Connect: 18,000건 성공 <span className="inline-block ml-1 px-2 py-0.5 bg-emerald-500/20 text-emerald-300 text-xs font-bold rounded-full">↑ 80% 성능 증가</span></li>
-                  <li>• KO (실패): <span className="text-emerald-400 font-bold">0건</span></li>
-                  <li>• 개선점: 불필요한 HTTP Handshake 제거로 서버 부하 극적 감소</li>
-                  <li>• 평균 응답 시간: <span className="text-emerald-400 font-bold">15ms ~ 34ms</span> 이내로 단축</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Awards Section */}
+        {/* Troubleshooting */}
         <section>
-          <div className="flex items-center mb-8">
-            <Award className="text-indigo-400 mr-3" size={28} />
-            <h2 className="text-3xl font-bold text-white">Awards</h2>
-          </div>
-
-          <div className="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden">
-            {AWARDS.map((award, idx) => (
-              <div key={idx} className={`p-6 flex flex-col md:flex-row md:items-center justify-between ${idx !== AWARDS.length - 1 ? 'border-b border-slate-700' : ''}`}>
-                <div className="mb-4 md:mb-0">
-                  <h3 className="text-lg font-bold text-slate-200 flex items-center">
-                    {idx === 0 && <Award size={18} className="text-yellow-500 mr-2" />}
-                    {award.title}
-                  </h3>
-                  <p className="text-slate-400 text-sm mt-1">{award.description}</p>
-                </div>
-                <div className="text-left md:text-right shrink-0">
-                  <div className="text-indigo-400 font-medium">{award.date}</div>
-                  <div className="text-slate-500 text-sm">{award.issuer}</div>
-                </div>
-              </div>
+          <SectionTitle>Troubleshooting</SectionTitle>
+          <div className="space-y-3">
+            {ISSUES.map((issue) => (
+              <IssueCard key={issue.title} issue={issue} />
             ))}
           </div>
         </section>
 
+        {/* Awards */}
+        <section>
+          <SectionTitle>Awards</SectionTitle>
+          <div className="bg-slate-900/60 border border-slate-800 rounded-lg divide-y divide-slate-800">
+            {AWARDS.map((a) => (
+              <div key={a.title} className="flex items-center justify-between px-4 py-2.5 text-sm">
+                <span className="text-slate-200">{a.title}</span>
+                <span className="text-slate-500 shrink-0 ml-4">{a.date} | (주)엘리스</span>
+              </div>
+            ))}
+          </div>
+        </section>
       </main>
     </div>
   );
