@@ -19,7 +19,7 @@ const MAIN_PROJECTS = [
     period: '2026.04 - 2026.06',
     team: '1명 (개인)',
     role: '풀스택 개발',
-    summary: 'Spring Boot로 1차 구축 후 Hono + Cloudflare Workers 서버리스로 마이그레이션, 서버/DB 상시 고정비 0원',
+    summary: 'Spring Boot로 1차 구축 후 Hono + Cloudflare Workers 서버리스로 마이그레이션, 상시 서버·DB 운영비 0원 (무료 티어 내 운영)',
     links: { url: 'https://trinione.com/' },
     diagram: '/images/active_diagram/Trinione_API_activity.png',
     techStack: ['TypeScript', 'React 19', 'Tailwind CSS 4', 'Hono', 'Cloudflare Workers', 'D1', 'R2', 'Drizzle ORM'],
@@ -30,8 +30,8 @@ const MAIN_PROJECTS = [
       'Zod 유효성 검사, Resend API 이메일 알림'
     ],
     points: [
-      '도메인 규칙을 Spring Boot로 먼저 검증한 뒤 AI 도구(Claude, GPT 등)로 TypeScript/Hono로 이전해 학습 곡선과 개발 기간 단축',
-      '24시간 상시 서버 대신 요청 시 동작하는 엣지 런타임으로 초기 운영 고정비 제거',
+      '도메인 규칙과 API 명세를 익숙한 Spring Boot로 먼저 확정한 뒤, 이를 기준으로 TypeScript/Hono로 이전. 코드 변환에는 AI 도구(Claude, GPT 등)를 활용해 새 스택 적응 기간 단축',
+      '24시간 상시 서버 대신 요청 시에만 실행되는 엣지 런타임으로 서버·DB 상시 운영비 제거',
       'D1 Rows Read 폭증 원인을 실행 계획 분석으로 찾아 인덱스 추가로 해결 (하단 Troubleshooting 참고)'
     ]
   },
@@ -40,7 +40,7 @@ const MAIN_PROJECTS = [
     desc: 'MSA 기반 C2C 경매 이커머스',
     period: '2026.01 - 2026.03',
     team: '4명 (팀장)',
-    role: '대기열 시스템 설계 및 최적화',
+    role: 'Gateway·대기열 시스템 설계 및 최적화, 이벤트 정합성 처리',
     summary: 'Redis ZSet 대기열, Polling → SSE 전환으로 동시 처리 10,000 → 18,000건 (+80%), 에러율 0%',
     links: {
       github: 'https://github.com/Bidket',
@@ -79,8 +79,8 @@ const MAIN_PROJECTS = [
       'Redis로 주문 생성 멱등성 보장, 단건 조회에만 선택적 캐시 적용'
     ],
     points: [
-      'HUB_MANAGER 주문 조회 불가 문제(데이터 물리 분리)를 비동기 응답으로 소속 ID를 Order에 복제·인덱싱해 해결',
-      '배송·허브 계산까지 동기 처리하던 주문 생성을 큐 기반 최종 일관성으로 재설계, 클라이언트는 폴링으로 상태 확인'
+      '허브 정보가 다른 서비스 DB에 있어 HUB_MANAGER가 주문을 조회하지 못하던 문제를, 비동기 응답으로 받은 소속 허브 ID를 Order에 복제·인덱싱해 해결',
+      '배송·허브 계산까지 동기 처리하던 주문 생성을 큐 기반 최종 일관성으로 재설계. 생성 직후 1회성 결과 확인이라 SSE 연결 유지 대신 폴링으로 충분하다고 판단'
     ]
   }
 ];
@@ -105,27 +105,27 @@ const OTHER_PROJECTS = [
   },
   {
     title: '우리 동네 병원',
-    desc: '위치기반 병원 탐색 및 실시간 상담',
+    desc: '위치기반 병원 탐색 및 의료인 상담',
     period: '2025.01 - 2025.02',
     team: '3명 (팀장)',
-    role: '일정/이슈 관리, 회원·QnA 개발',
-    summary: 'OAuth2 + JWT(HttpOnly 쿠키, Redis) 인증, 의료인 QnA 및 실시간 채팅 상담 (웹서비스 프로젝트 III 대상)',
+    role: '팀 리더(일정·이슈 관리), 회원·인증·QnA 상담·면허 인증 개발',
+    summary: 'OAuth2 + JWT(HttpOnly 쿠키, Redis) 인증, 의료인 QnA 상담 (웹서비스 프로젝트 III 대상)',
     links: {
       github: 'https://github.com/qqqqq7666/UriDongneHostpital',
       youtube: 'https://youtu.be/M2rdB4fV2Io',
       notion: 'https://www.notion.so/1a72dc8f74fd80998765c7c1c7f17484?source=copy_link'
     },
     diagram: '/images/active_diagram/UriDongneHospital_activity.png',
-    techStack: ['Java', 'Spring Boot', 'Spring Security', 'JWT', 'OAuth2', 'Kafka', 'MySQL', 'Redis', 'MongoDB', 'AWS EC2'],
+    techStack: ['Java', 'Spring Boot', 'Spring Security', 'JWT', 'OAuth2', 'MySQL', 'Redis', 'AWS EC2'],
     features: [
-      'DataHub 의료인 면허 인증 API 연동, 민감정보 Base64 처리',
-      'OAuth2(카카오/네이버/구글) 로그인, Access Token은 HttpOnly 쿠키, Refresh Token은 Redis 저장',
-      'Google SMTP 이메일 인증 (Redis로 만료 관리)',
-      '의료인-일반 사용자 QnA 및 실시간 채팅 상담'
+      'Spring Security + JWT(Access Token은 HttpOnly 쿠키, Refresh Token은 Redis 저장), OAuth2(카카오/네이버/구글) 로그인',
+      'DataHub 의료인 면허 인증 API 연동, 민감정보 AES-256(CBC) 암호화 후 전송',
+      'Google SMTP + Thymeleaf 템플릿 이메일 인증, 인증 코드는 Redis TTL 5분으로 만료 관리',
+      'QnA(상담-의료인 답변) API: 작성자 검증, 답변이 달린 상담은 수정·삭제 차단'
     ],
     points: [
       'OAuth2 로그인 필터·핸들러 직접 구현으로 성공/실패 로직 제어',
-      'Facade 패턴으로 다중 Repository 서비스의 복잡도와 테스트 부담 완화'
+      '서비스를 조회(Retrieve)·변경(Management)으로 분리하고 Facade로 묶어 다중 Repository 의존에 따른 복잡도와 테스트 부담 완화'
     ]
   },
   {
@@ -145,19 +145,20 @@ const OTHER_PROJECTS = [
     features: [
       'PortOne 통합 결제 및 카카오 우편번호 API 연동',
       '주문 조회, 구매 확정 시 1% 포인트 자동 적립, 관리자 포인트 지급/회수',
-      '장바구니 LocalStorage 저장 및 옵션 변경'
+      '장바구니 LocalStorage 저장 및 옵션 변경',
+      'Google OAuth2 로그인 및 추가 정보 입력 가입 연동'
     ],
     points: [
       'PortOne, 카카오 외부 API 연동으로 클라이언트-백엔드 간 데이터 흐름 설계',
-      'RDB를 직접 설계하며 시행착오 끝에 테이블 관계 구조 도출, 전반적인 테스트 코드 작성',
-      'GitLab 협업 및 팀장으로서 일정·이슈 관리 (프로젝트 최우수상)'
+      '주문·결제·포인트 테이블 관계를 직접 설계',
+      'GitLab에서 협업(현재 GitHub로 이관), 팀장으로서 일정·이슈 관리'
     ]
   }
 ];
 
 const AWARDS = [
-  { title: '엘리스 트랙 리더스파크상 (리더십)', date: '2025.03' },
-  { title: '웹서비스 프로젝트 III 대상', date: '2025.03' },
+  { title: '리더스파크상 (리더십)', date: '2025.03' },
+  { title: '웹서비스 프로젝트 III 대상 (우리 동네 병원)', date: '2025.03' },
   { title: '웹서비스 프로젝트 II 최우수상 (Eclipse)', date: '2025.01' }
 ];
 
@@ -206,7 +207,7 @@ const ProjectCard = ({ project, sub = false }) => {
 
         <div className="flex items-center gap-1.5 shrink-0">
           {links.url && (
-            <IconLink href={links.url} title="Live Website" primary>
+            <IconLink href={links.url} title="라이브 사이트" primary>
               <ExternalLink size={16} />
             </IconLink>
           )}
@@ -216,12 +217,12 @@ const ProjectCard = ({ project, sub = false }) => {
             </IconLink>
           )}
           {links.youtube && (
-            <IconLink href={links.youtube} title="YouTube Demo">
+            <IconLink href={links.youtube} title="YouTube 시연">
               <Youtube size={16} />
             </IconLink>
           )}
           {links.notion && (
-            <IconLink href={links.notion} title="Trouble Shooting">
+            <IconLink href={links.notion} title="Notion 문서">
               <BookOpen size={16} />
             </IconLink>
           )}
@@ -295,8 +296,8 @@ const PollingVsSse = () => (
         <thead className="text-slate-500 text-xs">
           <tr>
             <th className="py-1.5 pr-4 font-medium"></th>
-            <th className="py-1.5 pr-4 font-medium">Polling (12,000)</th>
-            <th className="py-1.5 font-medium">SSE (18,000)</th>
+            <th className="py-1.5 pr-4 font-medium">Polling (12,000명)</th>
+            <th className="py-1.5 font-medium">SSE (18,000명)</th>
           </tr>
         </thead>
         <tbody className="text-slate-300 divide-y divide-slate-800">
@@ -325,13 +326,13 @@ const PollingVsSse = () => (
       <div className="grid md:grid-cols-2 gap-4 mt-3">
         <figure className="rounded-md border border-rose-500/30 overflow-hidden">
           <figcaption className="px-3 py-1.5 bg-rose-500/10 text-xs text-rose-300">
-            <span className="font-semibold">Before: Polling</span> (12,000 요청, KO 1,590건)
+            <span className="font-semibold">Before: Polling</span> (12,000명, KO 1,590건)
           </figcaption>
           <img src="/images/polling_12000.png" alt="Polling 부하 테스트 결과" className="w-full h-auto" />
         </figure>
         <figure className="rounded-md border border-emerald-500/30 overflow-hidden">
           <figcaption className="px-3 py-1.5 bg-emerald-500/10 text-xs text-emerald-300">
-            <span className="font-semibold">After: SSE</span> (18,000 연결, KO 0건)
+            <span className="font-semibold">After: SSE</span> (18,000명, KO 0건)
           </figcaption>
           <img src="/images/sse_18000.png" alt="SSE 부하 테스트 결과" className="w-full h-auto" />
         </figure>
@@ -353,9 +354,9 @@ const ISSUES = [
   {
     title: 'Polling → SSE 전환, 대기열 처리량 개선',
     project: 'Bidket',
-    summary: '동시 처리 12,000 → 18,000건 (+80%), 에러율 0%. Gatling 부하 테스트로 Polling의 한계를 확인하고 SSE로 전환',
+    summary: '동시 처리 10,000 → 18,000건 (+80%), 에러율 0%. Gatling 부하 테스트로 Polling의 한계를 확인하고 SSE로 전환',
     rows: [
-      { label: '문제', content: '폴링 방식 부하 테스트(12,000명)에서 상태 조회 요청이 전체의 94%(65만 건)를 차지했고, 잦은 커넥션 생성으로 KO 1,590건(Address already in use) 발생' },
+      { label: '문제', content: '폴링 방식은 10,000명까지 KO 0건이었으나 12,000명 부하 테스트에서 상태 조회 요청이 전체의 94%(65만 건)를 차지했고, 잦은 커넥션 생성으로 KO 1,590건(Address already in use) 발생' },
       { label: '해결', content: 'SSE 단방향 스트림으로 전환해 반복 요청과 연결 생성·해제 제거, Redis Lua Script로 대기열 연산의 원자성 보장' }
     ],
     extra: <PollingVsSse />
@@ -363,7 +364,7 @@ const ISSUES = [
   {
     title: 'D1 Rows Read 폭증, 인덱스 튜닝',
     project: 'TRINIONE',
-    summary: '매물 200건인데 Rows read 4.7억. 실행 계획 분석 후 복합 인덱스 3개로 풀 스캔과 Temp B-Tree 제거',
+    summary: '매물 200건인데 Rows read 4.7억. 실행 계획 분석 후 인덱스 3개로 풀 스캔과 Temp B-Tree 제거',
     rows: [
       {
         label: '문제',
@@ -377,7 +378,7 @@ const ISSUES = [
           'ORDER BY 인덱스 부재로 Temp B-Tree 정렬 발생'
         ]
       },
-      { label: '해결', content: '조건, 정렬, 서브쿼리 컬럼 기준 복합 인덱스 3개 생성', code: INDEX_SQL },
+      { label: '해결', content: '조건, 정렬, 서브쿼리 컬럼 기준 인덱스 3개 생성', code: INDEX_SQL },
       {
         label: '결과',
         content: '실행 계획이 SCAN에서 SEARCH로 전환, 스캔량이 반환 건수 수준으로 감소 (99.9% 이상 절감)'
@@ -456,9 +457,9 @@ export default function App() {
           <span className="text-lg md:text-xl font-bold text-indigo-400 tracking-wide">WEB BACKEND DEVELOPER</span>
         </h1>
         <p className="text-base md:text-lg text-slate-400 leading-relaxed mt-4 max-w-2xl">
-          일관된 설계 규약으로 팀의 코드 통일성을 확보하고,
+          문제의 원인을 끝까지 파고들어 해결하는 백엔드 개발자입니다.
           <br className="hidden md:block" />
-          탄탄한 구조 위에서 건강하게 동작하는 서비스를 만듭니다.
+          성능과 운영 비용, 팀의 협업까지 함께 생각합니다.
         </p>
         <div className="flex gap-3 mt-5">
           <a
@@ -530,11 +531,12 @@ export default function App() {
         {/* Awards */}
         <section>
           <SectionTitle>Awards</SectionTitle>
+          <p className="-mt-2 mb-3 text-xs text-slate-500">(주)엘리스 SW 트랙 수상</p>
           <div className="bg-slate-900/60 border border-slate-800 rounded-lg divide-y divide-slate-800">
             {AWARDS.map((a) => (
               <div key={a.title} className="flex items-center justify-between px-4 py-2.5 text-sm">
                 <span className="text-slate-200">{a.title}</span>
-                <span className="text-slate-500 shrink-0 ml-4">{a.date} | (주)엘리스</span>
+                <span className="text-slate-500 shrink-0 ml-4">{a.date}</span>
               </div>
             ))}
           </div>
