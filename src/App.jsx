@@ -31,10 +31,9 @@ const ZoomableImage = ({ src, alt, className = '' }) => (
 
 // 프로젝트 전반에서 실제로 반복 사용한 핵심 스택만 유지
 const SKILLS = [
-  { title: 'Backend', color: 'text-blue-400', skills: ['Java 21', 'Spring Boot 3', 'Spring Security', 'Spring Data JPA', 'WebFlux'] },
-  { title: 'Data', color: 'text-emerald-400', skills: ['Redis', 'PostgreSQL', 'MySQL'] },
-  { title: 'Architecture', color: 'text-purple-400', skills: ['MSA', 'Event-Driven', 'Kafka', 'RabbitMQ'] },
-  { title: 'Infra & Test', color: 'text-orange-400', skills: ['Docker', 'AWS EC2', 'Gatling'] }
+  { title: 'Backend', color: 'text-blue-400', skills: ['Java 21', 'Spring Boot 3', 'Spring Security', 'Spring Data JPA', 'WebFlux', 'Spring Cloud'] },
+  { title: 'Data & Messaging', color: 'text-emerald-400', skills: ['PostgreSQL', 'MySQL', 'Redis', 'Kafka', 'RabbitMQ'] },
+  { title: 'Infra', color: 'text-orange-400', skills: ['Docker', 'AWS', 'GitHub Actions'] }
 ];
 
 // 대표 프로젝트: 접힌 상태에서도 summary 한 줄로 핵심이 읽히도록 구성
@@ -48,17 +47,19 @@ const MAIN_PROJECTS = [
     summary: 'Spring Boot로 1차 구축 후 Hono + Cloudflare Workers 서버리스로 마이그레이션, 상시 서버·DB 운영비 0원 (무료 티어 내 운영)',
     links: { url: 'https://trinione.com/' },
     diagram: '/images/active_diagram/Trinione_API_activity.png',
-    techStack: ['TypeScript', 'React 19', 'Tailwind CSS 4', 'Hono', 'Cloudflare Workers', 'D1', 'R2', 'Drizzle ORM'],
+    techStack: ['TypeScript', 'React', 'Tailwind CSS', 'Hono', 'Cloudflare Workers', 'D1', 'R2', 'Drizzle ORM'],
     features: [
-      'React 19 + Tailwind 4 반응형 랜딩 및 문의 접수 폼',
-      'Hono + Cloudflare Workers 엣지 API, D1/R2를 Drizzle ORM으로 연동',
-      'JWT 관리자 대시보드(/admin)에서 매물·문의 CRUD',
+      'React + Tailwind 4 반응형 랜딩, 매물 목록(다중 조건 필터·정렬)·상세 및 문의 접수 폼',
+      'Hono + Cloudflare Workers 엣지 API, D1/R2를 Drizzle ORM으로 연동하고 hono/cache로 조회 API 엣지 캐싱',
+      'JWT(Access/Refresh 토큰 재발급) 관리자 대시보드에서 매물(다중 이미지 R2 업로드)·문의 CRUD 및 매물 정보 엑셀 다운로드',
+      '세대·상가 원장 관리 기능 및 GA4 기반 방문자 통계 대시보드',
       'Zod 유효성 검사, Resend API 이메일 알림'
     ],
     points: [
       '도메인 규칙과 API 명세를 익숙한 Spring Boot로 먼저 확정한 뒤, 이를 기준으로 TypeScript/Hono로 이전. 코드 변환에는 AI 도구(Claude, GPT 등)를 활용해 새 스택 적응 기간 단축',
       '24시간 상시 서버 대신 요청 시에만 실행되는 엣지 런타임으로 서버·DB 상시 운영비 제거',
-      'D1 Rows Read 폭증 원인을 실행 계획 분석으로 찾아 인덱스 추가로 해결 (하단 Troubleshooting 참고)'
+      'D1 Rows Read 폭증 원인을 실행 계획 분석으로 찾아 인덱스 추가로 해결 (하단 Troubleshooting 참고)',
+      'Access Token 만료 시 401 동시 요청을 단일 재발급(isRefreshing + 대기 큐)으로 처리해 중복 reissue 방지'
     ]
   },
   {
@@ -74,7 +75,7 @@ const MAIN_PROJECTS = [
       notion: 'https://www.notion.so/Bidket-2df2dc8f74fd81beb86aefdef217ddc9?source=copy_link'
     },
     diagram: '/images/active_diagram/Bidket_activity.png',
-    techStack: ['Java', 'Spring Boot', 'Spring Cloud', 'WebFlux', 'R2DBC', 'Kafka', 'PostgreSQL', 'Redis', 'Docker'],
+    techStack: ['Java', 'Spring Boot', 'Spring Cloud', 'WebFlux', 'R2DBC', 'Kafka', 'PostgreSQL', 'Redis', 'Docker', 'GitHub Actions'],
     features: [
       'Spring Cloud Gateway + WebFlux 기반 논블로킹 트래픽 처리',
       'Redis ZSet 대기열: 진입 순서 보장, 최대 수용 인원 및 초당 진입 수 동적 조절',
@@ -301,7 +302,7 @@ const ProjectCard = ({ project, sub = false }) => {
           {project.diagram && (
             <details open={printing || undefined}>
               <summary className="cursor-pointer text-xs text-slate-500 hover:text-slate-300 transition-colors">
-                활동 다이어그램 보기 <span className="text-slate-600">(클릭하면 원본)</span>
+                활동 다이어그램 보기 <span className="text-slate-600">(클릭시 원본 크기)</span>
               </summary>
               <div className="mt-3">
                 <ZoomableImage
